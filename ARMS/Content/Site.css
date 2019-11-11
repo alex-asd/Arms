@@ -1,0 +1,118 @@
+﻿/*OVERWRITING CSS*/
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    /*Custom body background*/
+    background-color: #282E34;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+hr {
+    background-color: transparent;
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #000;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.index-image-one, .index-image-two {
+    position: relative;
+    opacity: 0.95;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.index-image-one {
+    /* The image used */
+    background-image: url(../Images/index-image-1.png);
+    height: 645px;
+    width: 100%;
+}
+
+.index-image-two {
+    /* The image used */
+    background-image: url(../Images/index-image-2.png);
+    height: 733px;
+    min-width: 926px;
+}
+
+.caption {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    color: #000;
+}
+
+.caption span.border {
+    background-color: #5c5c5b;
+    color: #fff;
+    padding: 18px;
+    font-size: 25px;
+    letter-spacing: 10px;
+    padding-right: 7px;
+}
+
+.article {
+    background-color: #5c5c5b;
+    color: #ddd;
+    text-align: center;
+    padding: 40px 80px;
+    text-align: justify;
+}
+
+footer {
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    border-top: 1px solid black;
+    padding-top: 15px;
+}
+
+.container {
+    width: 100% !important;
+    color: #fff;
+}
+
+/*.navbar-brand{
+    height: 54px;
+    font-size: 22px;
+}
+
+.navbar-nav li{
+    height: 54px;
+    font-size: 18px;
+}
+
+.navbar-nav li a{
+    height: inherit;
+    font-size: inherit;
+}*/
+
+
+/*CUSTOM CSS*/
