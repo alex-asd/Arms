@@ -8,8 +8,6 @@ namespace ARMS.Data.Models
 {
     public class Student : User
     {
-        public int StudentID { get; set; }
-
         public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<Lecture> Lectures { get; set; }
 

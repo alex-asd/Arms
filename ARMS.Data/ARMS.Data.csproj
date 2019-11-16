@@ -55,16 +55,34 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArmsContext.cs" />
+    <Compile Include="Migrations\201911112001433_initialCreate.cs" />
+    <Compile Include="Migrations\201911112001433_initialCreate.designer.cs">
+      <DependentUpon>201911112001433_initialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911161747202_remove-not-needed-id-fields.cs" />
+    <Compile Include="Migrations\201911161747202_remove-not-needed-id-fields.designer.cs">
+      <DependentUpon>201911161747202_remove-not-needed-id-fields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Lecture.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201911112001433_initialCreate.resx">
+      <DependentUpon>201911112001433_initialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911161747202_remove-not-needed-id-fields.resx">
+      <DependentUpon>201911161747202_remove-not-needed-id-fields.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

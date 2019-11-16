@@ -7,7 +7,6 @@ namespace ARMS.Data.Models
 {
     public class Teacher : User
     {
-        public int TeacherID { get; set; }
         public virtual ICollection<Course> Courses { get; set; }
         public virtual ICollection<Lecture> Lectures { get; set; }
 
