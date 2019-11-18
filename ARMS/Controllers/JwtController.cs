@@ -1,4 +1,5 @@
 ﻿using ARMS.ViewModel;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Web;
 using System.Web.Http;
 
 namespace ARMS.Controllers
@@ -19,12 +21,30 @@ namespace ARMS.Controllers
         [Authorize]
         [Route("ok")]
         public IHttpActionResult Authenticated() => Ok("Authenticated");
+        
+        
+        [HttpGet]
+        [Authorize]
+        [Route("user")]
+        public IHttpActionResult GetUser()
+        {
+            var activeuser = 
+            return Ok<string>(activeuser);
+        }
 
 
         [HttpPost]
         [Route("login")]
         public IHttpActionResult Authenticate([FromBody] LoginVM loginVM)
         {
+            if(loginVM == null)
+            {
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest));
+            }
+
+         
+
+
             var loginResponse = new LoginResponseVM();
             var loginrequest = new LoginVM
             {
@@ -32,8 +52,21 @@ namespace ARMS.Controllers
                 Password = loginVM.Password
             };
 
-            var isUsernamePasswordValid = loginrequest.Password == "admin";
+            var isUsernamePasswordValid = false;
+            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userExists = userManager.FindByEmailAsync(loginrequest.Email).Result;
+
+            if (userExists != null)
+            {
+                var specificUser = userManager.FindAsync(userExists.UserName, loginrequest.Password).Result;
+                if(specificUser != null)
+                {
+                    isUsernamePasswordValid = true;
+                }
+            }
+
             // if credentials are valid
+
             if (isUsernamePasswordValid)
             {
                 var token = CreateToken(loginrequest.Email);
