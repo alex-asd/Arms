@@ -31,5 +31,70 @@ namespace ARMS.Data.Models
             this.CourseName = courseName;
             this.CourseDescription = courseDescription;
         }
+
+        #region Database Interactions
+        public bool Insert()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
+                    // Insert the new user to the DB
+                    dc.Courses.Add(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+
+        public bool Update()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
+
+                    sqlEntry.CourseName = this.CourseName;
+                    sqlEntry.CourseDescription = this.CourseDescription;
+
+                    dc.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+
+        public bool Delete()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
+                    dc.Courses.Remove(sqlEntry);
+
+                    dc.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+        #endregion
     }
 }

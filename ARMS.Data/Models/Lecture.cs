@@ -26,5 +26,73 @@ namespace ARMS.Data.Models
             this.Course = course;
             this.CourseID = course.CourseID;
         }
+
+        #region Database Interactions
+        public bool Insert()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Lecutres.FirstOrDefault(x => x.LectureID == this.LectureID);
+                    // Insert the new user to the DB
+                    dc.Lecutres.Add(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+
+        public bool Update()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Lecutres.FirstOrDefault(x => x.LectureID == this.LectureID);
+
+                    sqlEntry.Date = this.Date;
+                    sqlEntry.Course = this.Course;
+                    sqlEntry.CourseID = this.Course.CourseID;
+                    sqlEntry.Students = this.Students;
+                    sqlEntry.Teachers = this.Teachers;
+
+                    dc.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+
+        public bool Delete()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Lecutres.FirstOrDefault(x => x.LectureID == this.LectureID);
+                    dc.Lecutres.Remove(sqlEntry);
+
+                    dc.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+        #endregion
     }
 }

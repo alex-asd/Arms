@@ -21,5 +21,74 @@ namespace ARMS.Data.Models
         {
 
         }
+
+        #region Database Interactions
+        public bool Insert()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Students.FirstOrDefault(x => x.ID == this.ID);
+                    // Insert the new user to the DB
+                    dc.Students.Add(this);
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+
+        public bool Update()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Students.FirstOrDefault(x => x.ID == this.ID);
+
+                    sqlEntry.FirstName = this.FirstName;
+                    sqlEntry.LastName = this.LastName;
+                    sqlEntry.Password = this.Password;
+                    sqlEntry.Lectures = this.Lectures;
+                    sqlEntry.Courses = this.Courses;
+                    sqlEntry.Email = this.Email;
+
+                    dc.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+
+        public bool Delete()
+        {
+            bool success = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Students.FirstOrDefault(x => x.ID == this.ID);
+                    dc.Students.Remove(sqlEntry);
+
+                    dc.SaveChanges();
+                }
+                success = true;
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return success;
+        }
+        #endregion
     }
 }
