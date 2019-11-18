@@ -10,7 +10,6 @@ namespace ARMS.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "ARMS.Models.ApplicationDbContext";
         }
 
         protected override void Seed(ARMS.Models.ApplicationDbContext context)
