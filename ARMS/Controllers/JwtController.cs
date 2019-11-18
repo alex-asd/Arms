@@ -28,8 +28,18 @@ namespace ARMS.Controllers
         [Route("user")]
         public IHttpActionResult GetUser()
         {
-            var activeuser = 
-            return Ok<string>(activeuser);
+            var claims = ClaimsPrincipal.Current.Claims;
+            var possible_user_emails = from Claim claim in claims where claim.Type == ClaimTypes.Email
+                             select claim.Value;
+            var user_emails = possible_user_emails.ToList();
+            if(user_emails.Count > 1)
+            {
+                //More than 1 users found with this claim, error.
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Conflict));
+            }
+
+           
+            return Ok<string>(user_emails[0]);
         }
 
 
@@ -55,7 +65,6 @@ namespace ARMS.Controllers
             var isUsernamePasswordValid = false;
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var userExists = userManager.FindByEmailAsync(loginrequest.Email).Result;
-
             if (userExists != null)
             {
                 var specificUser = userManager.FindAsync(userExists.UserName, loginrequest.Password).Result;

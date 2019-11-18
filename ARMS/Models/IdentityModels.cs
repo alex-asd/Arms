@@ -10,7 +10,6 @@ namespace ARMS.Models
     public class ApplicationUser : IdentityUser
     {
         public string TypeOfUser { get; set; }
-        public string UserName { get; set; }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
