@@ -13,7 +13,7 @@ namespace ARMS.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201911091431574_initialCreate"; }
+            get { return "201911181623013_initialCreate"; }
         }
         
         string IMigrationMetadata.Source
