@@ -11,6 +11,8 @@ namespace ARMS.Data.Models
     {
         public int CourseID { get; set; }
         [Required]
+        [Index(IsUnique = true)]
+        [MaxLength(300)]
         public string CourseName { get; set; }
         [MaxLength(200)]
         public string CourseDescription { get; set; }

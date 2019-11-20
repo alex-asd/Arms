@@ -35,9 +35,9 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Lecutres.FirstOrDefault(x => x.LectureID == this.LectureID);
+                    var sqlEntry = dc.Lectures.FirstOrDefault(x => x.LectureID == this.LectureID);
                     // Insert the new user to the DB
-                    dc.Lecutres.Add(this);
+                    dc.Lectures.Add(this);
                 }
             }
             catch (Exception ex)
@@ -54,7 +54,7 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Lecutres.FirstOrDefault(x => x.LectureID == this.LectureID);
+                    var sqlEntry = dc.Lectures.FirstOrDefault(x => x.LectureID == this.LectureID);
 
                     sqlEntry.Date = this.Date;
                     sqlEntry.Course = this.Course;
@@ -80,8 +80,8 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Lecutres.FirstOrDefault(x => x.LectureID == this.LectureID);
-                    dc.Lecutres.Remove(sqlEntry);
+                    var sqlEntry = dc.Lectures.FirstOrDefault(x => x.LectureID == this.LectureID);
+                    dc.Lectures.Remove(sqlEntry);
 
                     dc.SaveChanges();
                 }

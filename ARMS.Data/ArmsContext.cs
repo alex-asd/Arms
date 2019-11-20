@@ -12,6 +12,6 @@ namespace ARMS.Data
         public DbSet<Student> Students { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<Lecture> Lecutres { get; set; }
+        public DbSet<Lecture> Lectures { get; set; }
     }
 }

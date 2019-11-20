@@ -17,7 +17,7 @@ namespace ARMS.Data.Models
             this.Lectures = new HashSet<Lecture>();
         }
 
-        public Student(string firstName, string lastName, string email, string password) : base(firstName, lastName, email, password)
+        public Student(string firstName, string lastName, string email, string username) : base(firstName, lastName, email, username)
         {
 
         }
@@ -53,7 +53,7 @@ namespace ARMS.Data.Models
 
                     sqlEntry.FirstName = this.FirstName;
                     sqlEntry.LastName = this.LastName;
-                    sqlEntry.Password = this.Password;
+                    sqlEntry.Username = this.Username;
                     sqlEntry.Lectures = this.Lectures;
                     sqlEntry.Courses = this.Courses;
                     sqlEntry.Email = this.Email;

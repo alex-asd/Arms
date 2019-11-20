@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARMS", "ARMS\ARMS.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARMS.Data", "ARMS.Data\ARMS.Data.csproj", "{C8EFA12A-FB15-4B87-8B74-483BEE9574BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARMS.WebService", "ARMS.WebService\ARMS.WebService.csproj", "{2E579128-9E87-48EB-AFC2-A4C8DC5B5E2F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,10 +21,6 @@ Global
 		{C8EFA12A-FB15-4B87-8B74-483BEE9574BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8EFA12A-FB15-4B87-8B74-483BEE9574BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8EFA12A-FB15-4B87-8B74-483BEE9574BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E579128-9E87-48EB-AFC2-A4C8DC5B5E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E579128-9E87-48EB-AFC2-A4C8DC5B5E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E579128-9E87-48EB-AFC2-A4C8DC5B5E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E579128-9E87-48EB-AFC2-A4C8DC5B5E2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

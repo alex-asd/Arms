@@ -14,7 +14,7 @@ namespace ARMS.Controllers
         //GET api/Util
         public Student GetStudentWithID()
         {
-            var student = new Student() { FirstName = "Aleksandar", LastName = "Stoyanov", Email = "asd@dsa.bg", Password = "somehash" };
+            var student = new Student() { FirstName = "Aleksandar", LastName = "Stoyanov", Email = "asd@dsa.bg", Username = "somename" };
             return student;
         }
     }
