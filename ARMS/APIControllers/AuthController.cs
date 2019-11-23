@@ -8,51 +8,106 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
+using System.Xml.XPath;
+using ARMS.Data.Models;
+using ARMS.Helpers;
+using ARMS.Models;
+using Microsoft.AspNet.Identity;
 
-namespace ARMS.Controllers
+namespace ARMS.APIControllers
 {
     [RoutePrefix("auth")]
-    public class JwtController : ApiController
+    public class AuthController : ApiController
     {
-
         [HttpGet]
         [Authorize]
         [Route("ok")]
         public IHttpActionResult Authenticated() => Ok("Authenticated");
-        
-        
+
+
         [HttpGet]
         [Authorize]
         [Route("user")]
         public IHttpActionResult GetUser()
         {
             var claims = ClaimsPrincipal.Current.Claims;
-            var possible_user_emails = from Claim claim in claims where claim.Type == ClaimTypes.Email
-                             select claim.Value;
-            var user_emails = possible_user_emails.ToList();
-            if(user_emails.Count > 1)
+            var user_email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            var user_name = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+            if (user_email == null || user_name == null)
             {
-                //More than 1 users found with this claim, error.
-                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.Conflict));
+                return Unauthorized();
             }
 
-           
-            return Ok<string>(user_emails[0]);
+            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var currentUser = userManager.FindByEmailAsync(user_email.Value).Result;
+            if (currentUser == null)
+            {
+                return Unauthorized();
+            }
+            
+            if (currentUser.TypeOfUser == "student")
+            {
+                var student = StudentHelper.GetByUsername(user_name.Value);
+                return Ok<Student>(student);
+            }
+            else if (currentUser.TypeOfUser == "teacher")
+            {
+                var teacher = TeacherHelper.GetByUsername(user_name.Value);
+                return Ok<Teacher>(teacher);
+            }
+            else
+            {
+                return Conflict();
+            }
         }
 
+
+        [HttpPost]
+        [Route("register")]
+        [AllowAnonymous]
+        public async Task<IHttpActionResult> Register([FromBody] RegistrationVM registrationVm)
+        {
+            if (registrationVm == null)
+            {
+                return BadRequest("Oops, something went wrong");
+            }
+
+            var email = registrationVm.Email;
+            var password = registrationVm.Password;
+            var type = registrationVm.TypeOfUser;
+            if (email == null || password == null || type == null)
+            {
+                return BadRequest("Request parameters not met");
+            }
+
+            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            //TODO: CREATE Student/Teacher after user based on type.
+            var user = new ApplicationUser
+                {UserName = registrationVm.Email, Email = registrationVm.Email, TypeOfUser = registrationVm.TypeOfUser};
+            var result = await userManager.CreateAsync(user, registrationVm.Password);
+            if (result.Succeeded)
+            {
+                //Supplying token for automatic auth.
+                var token = CreateToken(user.Email, user.UserName);
+                return Ok(token);
+            }
+            else
+            {
+                return BadRequest(String.Join(";", result.Errors));
+            }
+        }
 
         [HttpPost]
         [Route("login")]
         public IHttpActionResult Authenticate([FromBody] LoginVM loginVM)
         {
-            if(loginVM == null)
+            if (loginVM == null)
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
-
-         
 
 
             var loginResponse = new LoginResponseVM();
@@ -68,8 +123,9 @@ namespace ARMS.Controllers
             if (userExists != null)
             {
                 var specificUser = userManager.FindAsync(userExists.UserName, loginrequest.Password).Result;
-                if(specificUser != null)
+                if (specificUser != null)
                 {
+                    loginrequest.UserName = specificUser.UserName;
                     isUsernamePasswordValid = true;
                 }
             }
@@ -78,10 +134,11 @@ namespace ARMS.Controllers
 
             if (isUsernamePasswordValid)
             {
-                var token = CreateToken(loginrequest.Email);
+                var token = CreateToken(loginrequest.Email, loginrequest.UserName);
                 //return the token
                 return Ok(token);
             }
+
             // if credentials are not valid send unauthorized status code in response
             loginResponse.responseMsg.StatusCode = HttpStatusCode.Unauthorized;
             IHttpActionResult response = ResponseMessage(loginResponse.responseMsg);
@@ -89,7 +146,7 @@ namespace ARMS.Controllers
         }
 
 
-        private string CreateToken(string email)
+        private string CreateToken(string email, string userName)
         {
             //Set issued at date
             DateTime issuedAt = DateTime.UtcNow;
@@ -102,7 +159,8 @@ namespace ARMS.Controllers
             //create a identity and add claims to the user which we want to log in
             var claimsIdentity = new ClaimsIdentity(new[]
             {
-                new Claim(ClaimTypes.Email, email)
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.NameIdentifier, userName)
             });
 
             const string secrectKey = "your secret key goes here";
