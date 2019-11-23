@@ -13,9 +13,9 @@ using System.Web;
 using System.Web.Http;
 using System.Xml.XPath;
 using ARMS.Data.Models;
-using ARMS.Helpers;
 using ARMS.Models;
 using Microsoft.AspNet.Identity;
+using ARMS.Data.Helpers;
 
 namespace ARMS.APIControllers
 {
