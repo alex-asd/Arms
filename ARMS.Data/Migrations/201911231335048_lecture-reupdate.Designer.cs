@@ -7,13 +7,13 @@ namespace ARMS.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.2.0-61023")]
-    public sealed partial class modelsupdate : IMigrationMetadata
+    public sealed partial class lecturereupdate : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(modelsupdate));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(lecturereupdate));
         
         string IMigrationMetadata.Id
         {
-            get { return "201911201431260_models-update"; }
+            get { return "201911231335048_lecture-reupdate"; }
         }
         
         string IMigrationMetadata.Source

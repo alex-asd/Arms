@@ -53,17 +53,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArmsContext.cs" />
-    <Compile Include="Migrations\201911112001433_initialCreate.cs" />
-    <Compile Include="Migrations\201911112001433_initialCreate.designer.cs">
-      <DependentUpon>201911112001433_initialCreate.cs</DependentUpon>
+    <Compile Include="Helpers\CourseHelper.cs" />
+    <Compile Include="Helpers\LectureHelper.cs" />
+    <Compile Include="Helpers\StudentHelper.cs" />
+    <Compile Include="Helpers\TeacherHelper.cs" />
+    <Compile Include="Migrations\201911231105247_initialCreate.cs" />
+    <Compile Include="Migrations\201911231105247_initialCreate.Designer.cs">
+      <DependentUpon>201911231105247_initialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201911161747202_remove-not-needed-id-fields.cs" />
-    <Compile Include="Migrations\201911161747202_remove-not-needed-id-fields.designer.cs">
-      <DependentUpon>201911161747202_remove-not-needed-id-fields.cs</DependentUpon>
+    <Compile Include="Migrations\201911231314372_lecture-model-update.cs" />
+    <Compile Include="Migrations\201911231314372_lecture-model-update.Designer.cs">
+      <DependentUpon>201911231314372_lecture-model-update.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201911201431260_models-update.cs" />
-    <Compile Include="Migrations\201911201431260_models-update.Designer.cs">
-      <DependentUpon>201911201431260_models-update.cs</DependentUpon>
+    <Compile Include="Migrations\201911231335048_lecture-reupdate.cs" />
+    <Compile Include="Migrations\201911231335048_lecture-reupdate.Designer.cs">
+      <DependentUpon>201911231335048_lecture-reupdate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911231407168_update-models.cs" />
+    <Compile Include="Migrations\201911231407168_update-models.Designer.cs">
+      <DependentUpon>201911231407168_update-models.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
@@ -79,14 +87,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201911112001433_initialCreate.resx">
-      <DependentUpon>201911112001433_initialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911231105247_initialCreate.resx">
+      <DependentUpon>201911231105247_initialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201911161747202_remove-not-needed-id-fields.resx">
-      <DependentUpon>201911161747202_remove-not-needed-id-fields.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911231314372_lecture-model-update.resx">
+      <DependentUpon>201911231314372_lecture-model-update.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201911201431260_models-update.resx">
-      <DependentUpon>201911201431260_models-update.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201911231335048_lecture-reupdate.resx">
+      <DependentUpon>201911231335048_lecture-reupdate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911231407168_update-models.resx">
+      <DependentUpon>201911231407168_update-models.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

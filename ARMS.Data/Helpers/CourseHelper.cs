@@ -9,7 +9,7 @@ using System.Data.Entity;
 using ARMS.Data.Models;
 using ARMS.Data;
 
-namespace ARMS.Helpers
+namespace ARMS.Data.Helpers
 {
     public static class CourseHelper
     {
@@ -23,8 +23,7 @@ namespace ARMS.Helpers
         // get course by its name
         public static Course GetByName(string courseName)
         {
-            var lowCourseName = courseName.ToLower();
-            var model = Get(0, lowCourseName);
+            var model = Get(0, courseName);
             return model;
         }
 

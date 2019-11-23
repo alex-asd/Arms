@@ -1,4 +1,4 @@
-﻿namespace ARMS.Data.Migrations
+namespace ARMS.Data.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -12,10 +12,11 @@
                 c => new
                     {
                         CourseID = c.Int(nullable: false, identity: true),
-                        CourseName = c.String(nullable: false),
+                        CourseName = c.String(nullable: false, maxLength: 300),
                         CourseDescription = c.String(maxLength: 200),
                     })
-                .PrimaryKey(t => t.CourseID);
+                .PrimaryKey(t => t.CourseID)
+                .Index(t => t.CourseName, unique: true);
             
             CreateTable(
                 "dbo.Lectures",
@@ -34,26 +35,28 @@
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        StudentID = c.Int(nullable: false),
+                        Username = c.String(nullable: false, maxLength: 50),
                         LastName = c.String(nullable: false, maxLength: 50),
                         FirstName = c.String(nullable: false, maxLength: 50),
                         Email = c.String(nullable: false, maxLength: 50),
-                        Password = c.String(nullable: false, maxLength: 20),
                     })
-                .PrimaryKey(t => t.ID);
+                .PrimaryKey(t => t.ID)
+                .Index(t => t.Username, unique: true)
+                .Index(t => t.Email, unique: true);
             
             CreateTable(
                 "dbo.Teachers",
                 c => new
                     {
                         ID = c.Int(nullable: false, identity: true),
-                        TeacherID = c.Int(nullable: false),
+                        Username = c.String(nullable: false, maxLength: 50),
                         LastName = c.String(nullable: false, maxLength: 50),
                         FirstName = c.String(nullable: false, maxLength: 50),
                         Email = c.String(nullable: false, maxLength: 50),
-                        Password = c.String(nullable: false, maxLength: 20),
                     })
-                .PrimaryKey(t => t.ID);
+                .PrimaryKey(t => t.ID)
+                .Index(t => t.Username, unique: true)
+                .Index(t => t.Email, unique: true);
             
             CreateTable(
                 "dbo.StudentCourses",
@@ -128,7 +131,12 @@
             DropIndex("dbo.StudentLectures", new[] { "Student_ID" });
             DropIndex("dbo.StudentCourses", new[] { "Course_CourseID" });
             DropIndex("dbo.StudentCourses", new[] { "Student_ID" });
+            DropIndex("dbo.Teachers", new[] { "Email" });
+            DropIndex("dbo.Teachers", new[] { "Username" });
+            DropIndex("dbo.Students", new[] { "Email" });
+            DropIndex("dbo.Students", new[] { "Username" });
             DropIndex("dbo.Lectures", new[] { "CourseID" });
+            DropIndex("dbo.Courses", new[] { "CourseName" });
             DropTable("dbo.TeacherLectures");
             DropTable("dbo.TeacherCourses");
             DropTable("dbo.StudentLectures");

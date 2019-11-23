@@ -9,7 +9,7 @@ using System.Data.Entity;
 using ARMS.Data.Models;
 using ARMS.Data;
 
-namespace ARMS.Helpers
+namespace ARMS.Data.Helpers
 {
     public static class TeacherHelper
     {
@@ -40,11 +40,11 @@ namespace ARMS.Helpers
                     // User id if given
                     if (teacherId > 0)
                     {
-                        model = dc.Teachers.Include(x => x.Courses).Include(x => x.Lectures).FirstOrDefault(x => x.ID == teacherId);
+                        model = dc.Teachers.Include(x => x.Courses).FirstOrDefault(x => x.ID == teacherId);
                     }
                     else if (username != null)
                     {
-                        model = dc.Teachers.Include(x => x.Courses).Include(x => x.Lectures).FirstOrDefault(x => x.Username == username);
+                        model = dc.Teachers.Include(x => x.Courses).FirstOrDefault(x => x.Username == username);
                     }
                 }
             }
@@ -98,7 +98,7 @@ namespace ARMS.Helpers
         {
             using (var dc = new ArmsContext())
             {
-                var list = dc.Teachers.Include(x => x.Courses).Include(x => x.Lectures).ToList();
+                var list = dc.Teachers.Include(x => x.Courses).ToList();
                 return list;
             }
         }

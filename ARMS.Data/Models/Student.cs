@@ -23,26 +23,7 @@ namespace ARMS.Data.Models
         }
 
         #region Database Interactions
-        public bool Insert()
-        {
-            bool success = false;
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var sqlEntry = dc.Students.FirstOrDefault(x => x.ID == this.ID);
-                    // Insert the new user to the DB
-                    dc.Students.Add(this);
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return success;
-        }
-
-        public bool Update()
+        public bool Upsert()
         {
             bool success = false;
             try
@@ -51,14 +32,25 @@ namespace ARMS.Data.Models
                 {
                     var sqlEntry = dc.Students.FirstOrDefault(x => x.ID == this.ID);
 
-                    sqlEntry.FirstName = this.FirstName;
-                    sqlEntry.LastName = this.LastName;
-                    sqlEntry.Username = this.Username;
-                    sqlEntry.Lectures = this.Lectures;
-                    sqlEntry.Courses = this.Courses;
-                    sqlEntry.Email = this.Email;
+                    // Insert new student to DB
+                    if (sqlEntry == null)
+                    {
+                        // Insert the new user to the DB
+                        dc.Students.Add(this);
+                    }
 
+                    // Update existing entry
+                    if(sqlEntry != null)
+                    {
+                        sqlEntry.FirstName = this.FirstName;
+                        sqlEntry.LastName = this.LastName;
+                        sqlEntry.Username = this.Username;
+                        sqlEntry.Lectures = this.Lectures;
+                        sqlEntry.Courses = this.Courses;
+                        sqlEntry.Email = this.Email;
+                    }
                     dc.SaveChanges();
+                    success = true;
                 }
                 success = true;
             }

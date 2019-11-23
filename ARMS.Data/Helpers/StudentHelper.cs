@@ -9,7 +9,7 @@ using System.Data.Entity;
 using ARMS.Data.Models;
 using ARMS.Data;
 
-namespace ARMS.Helpers
+namespace ARMS.Data.Helpers
 {
     public static class StudentHelper
     {

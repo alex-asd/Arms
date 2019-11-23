@@ -8,9 +8,8 @@ namespace ARMS.Data.Models
     public class Teacher : User
     {
         public virtual ICollection<Course> Courses { get; set; }
-        public virtual ICollection<Lecture> Lectures { get; set; }
 
-        public Teacher() { this.Courses = new HashSet<Course>(); this.Lectures = new HashSet<Lecture>(); }
+        public Teacher() { this.Courses = new HashSet<Course>(); }
 
         public Teacher(string firstName, string lastName, string email, string username) : base(firstName, lastName, email, username)
         {
@@ -18,7 +17,7 @@ namespace ARMS.Data.Models
         }
 
         #region Database Interactions
-        public bool Insert()
+        public bool Upsert()
         {
             bool success = false;
             try
@@ -26,38 +25,27 @@ namespace ARMS.Data.Models
                 using (var dc = new ArmsContext())
                 {
                     var sqlEntry = dc.Teachers.FirstOrDefault(x => x.ID == this.ID);
-                    // Insert the new user to the DB
-                    dc.Teachers.Add(this);
-                }
-            }
-            catch(Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return success;
-        }
 
-        public bool Update()
-        {
-            bool success = false;
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var sqlEntry = dc.Teachers.FirstOrDefault(x => x.ID == this.ID);
+                    if (sqlEntry == null)
+                    {
+                        // Insert the new user to the DB
+                        dc.Teachers.Add(this);
+                    }
+
+                    if(sqlEntry != null)
+                    {
+                        sqlEntry.FirstName = this.FirstName;
+                        sqlEntry.LastName = this.LastName;
+                        sqlEntry.Username = this.Username;
+                        sqlEntry.Courses = this.Courses;
+                        sqlEntry.Email = this.Email;
+                    }
                     
-                    sqlEntry.FirstName = this.FirstName;
-                    sqlEntry.LastName = this.LastName;
-                    sqlEntry.Username = this.Username;
-                    sqlEntry.Lectures = this.Lectures;
-                    sqlEntry.Courses = this.Courses;
-                    sqlEntry.Email = this.Email;
-
                     dc.SaveChanges();
                 }
                 success = true;
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 var catchMsg = ex.Message;
             }

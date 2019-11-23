@@ -7,9 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using ARMS.Data.Models;
-using ARMS.Data;
 
-namespace ARMS.Helpers
+namespace ARMS.Data.Helpers
 {
     public static class LectureHelper
     {
@@ -22,7 +21,7 @@ namespace ARMS.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    model = dc.Lectures.Include(x => x.Course).Include(x => x.Teachers).Include(x => x.Students).FirstOrDefault(x => x.LectureID == LectureId);
+                    model = dc.Lectures.Include(x => x.Course).Include(x => x.Students).FirstOrDefault(x => x.LectureID == LectureId);
                 }
             }
             catch (Exception ex)
@@ -37,7 +36,7 @@ namespace ARMS.Helpers
         {
             using (var dc = new ArmsContext())
             {
-                var list = dc.Lectures.Include(x => x.Students).Include(x => x.Course).Include(x => x.Teachers).ToList();
+                var list = dc.Lectures.Include(x => x.Students).Include(x => x.Course).ToList();
                 return list;
             }
         }

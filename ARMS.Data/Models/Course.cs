@@ -27,44 +27,37 @@ namespace ARMS.Data.Models
             this.Teachers = new HashSet<Teacher>();
         }
 
-        public Course(int courseID, string courseName, string courseDescription)
+        public Course(string courseName, string courseDescription)
         {
-            this.CourseID = courseID;
             this.CourseName = courseName;
             this.CourseDescription = courseDescription;
         }
 
         #region Database Interactions
-        public bool Insert()
+        public bool Upsert()
         {
             bool success = false;
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
-                    // Insert the new user to the DB
-                    dc.Courses.Add(this);
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return success;
-        }
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName);
 
-        public bool Update()
-        {
-            bool success = false;
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
+                    // Insert the new course to the DB
+                    if (sqlEntry == null)
+                    {
+                        dc.Courses.Add(this);
+                    }
 
-                    sqlEntry.CourseName = this.CourseName;
-                    sqlEntry.CourseDescription = this.CourseDescription;
+                    // Update existing course
+                    if(sqlEntry != null)
+                    {
+                        sqlEntry.CourseName = this.CourseName;
+                        sqlEntry.CourseDescription = this.CourseDescription;
+                        sqlEntry.Lectures = this.Lectures;
+                        sqlEntry.Students = this.Students;
+                        sqlEntry.Teachers = this.Teachers;
+                    }
 
                     dc.SaveChanges();
                 }
@@ -84,7 +77,7 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName);
                     dc.Courses.Remove(sqlEntry);
 
                     dc.SaveChanges();
@@ -96,6 +89,26 @@ namespace ARMS.Data.Models
                 var catchMsg = ex.Message;
             }
             return success;
+        }
+
+        public int GetCourseID()
+        {
+            int id = 0;
+
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName);
+                    id = sqlEntry.CourseID;
+                }
+            }
+            catch(Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+
+            return id;
         }
         #endregion
     }
