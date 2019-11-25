@@ -15,5 +15,12 @@ namespace ARMS.Data
         public DbSet<Attendee> Attendees { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lecture> Lectures { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Attendee>().HasRequired(c => c.User).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<Participant>().HasRequired(c => c.User).WithMany().WillCascadeOnDelete(false);
+            modelBuilder.Entity<Supervisor>().HasRequired(c => c.User).WithMany().WillCascadeOnDelete(false);
+        }
     }
 }
