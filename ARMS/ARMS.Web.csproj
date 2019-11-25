@@ -45,6 +45,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ARMS.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>Bin\ARMS.Data.exe</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -191,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="APIControllers\AuthController.cs" />
+    <Compile Include="APIControllers\CourseAPIController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -203,6 +207,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\APIUtils.cs" />
     <Compile Include="Migrations\201911181623013_initialCreate.cs" />
     <Compile Include="Migrations\201911181623013_initialCreate.Designer.cs">
       <DependentUpon>201911181623013_initialCreate.cs</DependentUpon>
