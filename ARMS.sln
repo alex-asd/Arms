@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.902
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARMS", "ARMS\ARMS.csproj", "{B7B70E00-F3BD-4B1D-8A72-A4B05F9CAC85}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARMS.Web", "ARMS\ARMS.Web.csproj", "{B7B70E00-F3BD-4B1D-8A72-A4B05F9CAC85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ARMS.Data", "ARMS.Data\ARMS.Data.csproj", "{C8EFA12A-FB15-4B87-8B74-483BEE9574BA}"
 EndProject

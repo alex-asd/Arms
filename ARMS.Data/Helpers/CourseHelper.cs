@@ -39,11 +39,11 @@ namespace ARMS.Data.Helpers
                     // User id if given
                     if (courseId > 0)
                     {
-                        model = dc.Courses.Include(x => x.Students).Include(x => x.Lectures).Include(x => x.Teachers).FirstOrDefault(x => x.CourseID == courseId);
+                        model = dc.Courses.Include(x => x.Creator).FirstOrDefault(x => x.CourseID == courseId);
                     }
                     else if (courseName != null)
                     {
-                        model = dc.Courses.Include(x => x.Students).Include(x => x.Lectures).Include(x => x.Teachers).FirstOrDefault(x => x.CourseName == courseName);
+                        model = dc.Courses.Include(x => x.Creator).FirstOrDefault(x => x.CourseName == courseName);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace ARMS.Data.Helpers
         {
             using (var dc = new ArmsContext())
             {
-                var list = dc.Courses.Include(x => x.Students).Include(x => x.Lectures).Include(x => x.Teachers).ToList();
+                var list = dc.Courses.Include(x => x.Creator).ToList();
                 return list;
             }
         }

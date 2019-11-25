@@ -21,7 +21,7 @@ namespace ARMS.Data.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    model = dc.Lectures.Include(x => x.Course).Include(x => x.Students).FirstOrDefault(x => x.LectureID == LectureId);
+                    model = dc.Lectures.Include(x => x.Course).FirstOrDefault(x => x.LectureID == LectureId);
                 }
             }
             catch (Exception ex)
@@ -36,7 +36,7 @@ namespace ARMS.Data.Helpers
         {
             using (var dc = new ArmsContext())
             {
-                var list = dc.Lectures.Include(x => x.Students).Include(x => x.Course).ToList();
+                var list = dc.Lectures.Include(x => x.Course).ToList();
                 return list;
             }
         }

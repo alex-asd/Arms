@@ -3,33 +3,31 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ARMS.Data.Models
 {
-    public class Lecture
+    public class Participant
     {
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public string ParticipantStatus { get; set; }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int LectureID { get; set; }
-        public bool CheckInEnabled { get; set; }
+        public int ParticipantID { get; set; }
 
-        [Required]
+        public int UserID { get; set; }
         public int CourseID { get; set; }
-
-        [ForeignKey("CourseID")]
+        
+        public virtual User User { get; set; }
         public virtual Course Course { get; set; }
-                
-        public Lecture() { }
 
-        public Lecture(DateTime from, DateTime to, int courseID)
+        public Participant() { }
+
+        public Participant(int userId, int courseId, string participantStatus)
         {
-            this.From = from;
-            this.To = to;
-            this.CourseID = courseID;
-            CheckInEnabled = false;
+            this.UserID = userId;
+            this.CourseID = courseId;
+            this.ParticipantStatus = participantStatus;
         }
 
         #region Database Interactions
@@ -41,21 +39,20 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Lectures.FirstOrDefault(x => x.LectureID == this.LectureID);
+                    var sqlEntry = dc.Participants.FirstOrDefault(x => x.ParticipantID == this.ParticipantID);
 
                     // Insert new lecture to DB
                     if (sqlEntry == null)
                     {
-                        dc.Lectures.Add(this);
+                        // Insert the new lecture to the db
+                        dc.Participants.Add(this);
                     }
 
                     // Update existing entry
                     if (sqlEntry != null)
                     {
-                        sqlEntry.From = this.From;
-                        sqlEntry.To = this.To;
-                        sqlEntry.CheckInEnabled = this.CheckInEnabled;
                         sqlEntry.CourseID = this.CourseID;
+                        sqlEntry.UserID = this.UserID;
                     }
                     dc.SaveChanges();
                 }
@@ -75,8 +72,8 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Lectures.FirstOrDefault(x => x.LectureID == this.LectureID);
-                    dc.Lectures.Remove(sqlEntry);
+                    var sqlEntry = dc.Participants.FirstOrDefault(x => x.ParticipantID == this.ParticipantID);
+                    dc.Participants.Remove(sqlEntry);
 
                     dc.SaveChanges();
                 }
@@ -87,26 +84,6 @@ namespace ARMS.Data.Models
                 var catchMsg = ex.Message;
             }
             return success;
-        }
-
-        public int GetLectureID()
-        {
-            int result = 0;
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var sqlEntry = dc.Lectures.FirstOrDefault(x => x.LectureID == this.LectureID);
-                    result = sqlEntry.LectureID;
-
-                    dc.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return result;
         }
         #endregion
     }

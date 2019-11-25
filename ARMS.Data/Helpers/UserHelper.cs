@@ -11,40 +11,40 @@ using ARMS.Data;
 
 namespace ARMS.Data.Helpers
 {
-    public static class StudentHelper
+    public static class UserHelper
     {
-        // get student by id
-        public static Student GetById(int studentId)
+        // get User by id
+        public static User GetById(int userId)
         {
-            var model = Get(studentId);
+            var model = Get(userId);
             return model;
         }
 
-        // get student by username
-        public static Student GetByUsername(string username)
+        // get User by username
+        public static User GetByUsername(string username)
         {
             var lowUsername = username.ToLower();
             var model = Get(0, lowUsername);
             return model;
         }
 
-        // get the actual student object
-        private static Student Get(int studentId = 0, string username = null)
+        // get the actual User object
+        private static User Get(int userId = 0, string username = null)
         {
-            Student model = null;
+            User model = null;
 
             try
             {
                 using (var dc = new ArmsContext())
                 {
                     // User id if given
-                    if (studentId > 0)
+                    if (userId > 0)
                     {
-                        model = dc.Students.Include(x => x.Courses).Include(x => x.Lectures).FirstOrDefault(x => x.ID == studentId);
+                        model = dc.Users.FirstOrDefault(x => x.UserID == userId);
                     }
                     else if (username != null)
                     {
-                        model = dc.Students.Include(x => x.Courses).Include(x => x.Lectures).FirstOrDefault(x => x.Username == username);
+                        model = dc.Users.FirstOrDefault(x => x.Username == username);
                     }
                 }
             }
@@ -55,25 +55,25 @@ namespace ARMS.Data.Helpers
             return model;
         }
 
-        // returns whether there is a student with such username in the DB
+        // returns whether there is a User with such username in the DB
         public static bool IsRegistered(string username, string email)
         {
             var lowerUsername = username.ToLower();
             using (var dc = new ArmsContext())
             {
-                return !dc.Students.Any(u => u.Username == lowerUsername);
+                return !dc.Users.Any(u => u.Username == lowerUsername);
             }
         }
 
-        // deletes a student with the targeted username
-        public static void DeleteStudent(string username)
+        // deletes a User with the targeted username
+        public static void DeleteUser(string username)
         {
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var student = dc.Students.Where(u => u.Username == username.ToLower()).FirstOrDefault();
-                    dc.Students.Remove(student);
+                    var User = dc.Users.Where(u => u.Username == username.ToLower()).FirstOrDefault();
+                    dc.Users.Remove(User);
 
                     dc.SaveChanges();
                 }
@@ -85,11 +85,11 @@ namespace ARMS.Data.Helpers
         }
 
         // for testing purposes
-        public static List<Student> GetAllStudents()
+        public static List<User> GetAllUsers()
         {
             using (var dc = new ArmsContext())
             {
-                var list = dc.Students.Include(x => x.Courses).Include(x => x.Lectures).ToList();
+                var list = dc.Users.ToList();
                 return list;
             }
         }

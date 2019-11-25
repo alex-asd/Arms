@@ -17,20 +17,17 @@ namespace ARMS.Data.Models
         [MaxLength(200)]
         public string CourseDescription { get; set; }
 
-        public ICollection<Lecture> Lectures { get; set; }
-        public virtual ICollection<Student> Students { get; set; }
-        public virtual ICollection<Teacher> Teachers { get; set; }
+        public int CreatorID { get; set; }
+        [ForeignKey("CreatorID")]
+        public virtual User Creator { get; set; }
 
-        public Course()
-        {
-            this.Students = new HashSet<Student>();
-            this.Teachers = new HashSet<Teacher>();
-        }
+        public Course() { }
 
-        public Course(string courseName, string courseDescription)
+        public Course(string courseName, string courseDescription, int creatorID)
         {
-            this.CourseName = courseName;
+            this.CourseName = courseName.ToLower();
             this.CourseDescription = courseDescription;
+            this.CreatorID = creatorID;
         }
 
         #region Database Interactions
@@ -41,7 +38,7 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName);
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName.ToLower());
 
                     // Insert the new course to the DB
                     if (sqlEntry == null)
@@ -50,13 +47,11 @@ namespace ARMS.Data.Models
                     }
 
                     // Update existing course
-                    if(sqlEntry != null)
+                    if (sqlEntry != null)
                     {
                         sqlEntry.CourseName = this.CourseName;
                         sqlEntry.CourseDescription = this.CourseDescription;
-                        sqlEntry.Lectures = this.Lectures;
-                        sqlEntry.Students = this.Students;
-                        sqlEntry.Teachers = this.Teachers;
+                        sqlEntry.CreatorID = this.CreatorID;
                     }
 
                     dc.SaveChanges();
@@ -100,10 +95,10 @@ namespace ARMS.Data.Models
                 using (var dc = new ArmsContext())
                 {
                     var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName);
-                    id = sqlEntry.CourseID;
+                    return sqlEntry.CourseID;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }

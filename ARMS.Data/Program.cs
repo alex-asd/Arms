@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ARMS.Data.Helpers;
+//using ARMS.Data.Helpers;
 
 namespace ARMS.Data
 {
@@ -16,87 +16,59 @@ namespace ARMS.Data
             //{
             //    try
             //    {
-                    //var c1 = new Course("DNP1-AY-Y19", "dotNet programming for noobs");
-                    //var c2 = new Course("DNP2-AX-Y19", "dotNet programming for intermediates");
-                    //var c3 = new Course("SDJ3-AX-Y19", "Detributed systems");
+            //        var u1 = new User("Kim JR", "Nielsen", "dotnetMaster@dot.net", "theDotNetGuru", "teacher");
+            //        var u2 = new User("Kasper JR", "Mortensen", "iprsJR@dot.net", "TryHardJR", "student");
+            //        var u3 = new User("Jacob JR", "Odinsson", "uslsJR@dot.net", "Teddorektx", "teacher");
+            //        var u4 = new User("Hristo JR", "Kosata", "nqmamkosmiJR@dot.net", "101PricheskiJR", "student");
+            //        var u5 = new User("Alex JR", "Stoyanov", "asd20@dot.net", "dotNetNoobJR", "student");
 
-                    //var t1 = new Teacher("Kim", "Nielsen", "dotnetMaster@dot.net", "theDotNetGuru");
-                    //var t2 = new Teacher("Kasper", "Mortensen", "iprs@dot.net", "TryHard");
-                    //var t3 = new Teacher("Jacob", "Odinsson", "usls@dot.net", "Teddorektx");
-                    //var t4 = new Teacher("Hristo", "Kosata", "nqmamkosmi@dot.net", "101Pricheski");
-                    //var t5 = new Teacher("Alex", "Stoyanov", "asd97@dot.net", "dotNetNoob");
+            //        var c1 = new Course("DNP1-AY-Y19", "dotNet programming for noobs", u1.GetUserID());
+            //        var c2 = new Course("DNP2-AX-Y19", "dotNet programming for intermediates", u1.GetUserID());
+            //        var c3 = new Course("SDJ3-AX-Y19", "Detributed systems", u3.GetUserID());
 
-                    //var s1 = new Student("Kim JR", "Nielsen", "dotnetMasterJR@dot.net", "theDotNetGuruJR");
-                    //var s2 = new Student("Kasper JR", "Mortensen", "iprsJR@dot.net", "TryHardJR");
-                    //var s3 = new Student("Jacob JR", "Odinsson", "uslsJR@dot.net", "TeddorektxJR");
-                    //var s4 = new Student("Hristo JR", "Kosata", "nqmamkosmiJR@dot.net", "101PricheskiJR");
-                    //var s5 = new Student("Alex JR", "Stoyanov", "asd20@dot.net", "dotNetNoobJR");
+            //        u1.Upsert();
+            //        u2.Upsert();
+            //        u3.Upsert();
+            //        u4.Upsert();
+            //        u5.Upsert();
 
-                    //c1.Upsert();
-                    //c2.Upsert();
-                    //c3.Upsert();
-                    //s1.Upsert();
-                    //s2.Upsert();
-                    //s3.Upsert();
-                    //s4.Upsert();
-                    //s5.Upsert();
-                    //t1.Upsert();
-                    //t2.Upsert();
-                    //t3.Upsert();
-                    //t4.Upsert();
-                    //t5.Upsert();
+            //        c1.Upsert();
+            //        c2.Upsert();
+            //        c3.Upsert();
 
-                    //var l1 = new Lecture(new DateTime(2019, 11, 23, 8, 20, 0), new DateTime(2019, 11, 23, 12, 0, 0), 56);
-                    //var l2 = new Lecture(new DateTime(2019, 11, 23, 8, 20, 0), new DateTime(2019, 11, 23, 12, 0, 0), 57);
+            //        var p1 = new Participant(u2.GetUserID(), c1.GetCourseID(), "Active");
+            //        var p2 = new Participant(u4.GetUserID(), c2.GetCourseID(), "Active");
+            //        var p3 = new Participant(u5.GetUserID(), c1.GetCourseID(), "Active");
+
+            //        p1.Upsert();
+            //        p2.Upsert();
+            //        p3.Upsert();
+
+
+            //        var l1 = new Lecture(new DateTime(2019, 11, 23, 8, 20, 0), new DateTime(2019, 11, 23, 12, 0, 0), c1.GetCourseID());
+            //        var l2 = new Lecture(new DateTime(2019, 11, 23, 8, 20, 0), new DateTime(2019, 11, 23, 12, 0, 0), c2.GetCourseID());
+            //        var l3 = new Lecture(new DateTime(2019, 11, 23, 8, 20, 0), new DateTime(2019, 11, 23, 12, 0, 0), c3.GetCourseID());
+
+            //        l1.Upsert();
+            //        l2.Upsert();
+            //        l3.Upsert();
+
+            //        var a1 = new Attendee(u2.GetUserID(), l1.GetLectureID(), "1sdasd561ssa");
+            //        var a2 = new Attendee(u4.GetUserID(), l2.GetLectureID(), "1sfbcxd561ysa34");
+            //        var a3 = new Attendee(u5.GetUserID(), l1.GetLectureID(), "1sdasd561asdsa");
+
+            //        a1.Upsert();
+            //        a2.Upsert();
+            //        a3.Upsert();
+
+            //        var s1 = new Supervisor(u1.GetUserID(), c1.GetCourseID());
+            //        var s2 = new Supervisor(u1.GetUserID(), c2.GetCourseID());
+            //        var s3 = new Supervisor(u2.GetUserID(), c3.GetCourseID());
+
+            //        s1.Upsert();
+            //        s2.Upsert();
+            //        s3.Upsert();
                     
-                    //l1.Upsert(56);
-                    //l2.Upsert(57);
-
-                    //c1.Students = new List<Student> { s1, s2, s3 };
-                    //c1.Teachers = new List<Teacher> { t1, t2 };
-                    //t1.Courses = new List<Course> { c1 };
-                    //t2.Courses = new List<Course> { c1 };
-                    //c1.Lectures = new List<Lecture> { l1 };
-
-                    //c2.Students = new List<Student> { s4, s2, s5 };
-                    //c2.Teachers = new List<Teacher> { t3 };
-                    //t3.Courses = new List<Course> { c2 };
-                    //c2.Lectures = new List<Lecture> { l2 };
-
-                    //c3.Students = new List<Student> { s1, s5 };
-                    //c3.Teachers = new List<Teacher> { t4, t5 };
-                    //t4.Courses = new List<Course> { c3 };
-                    //t5.Courses = new List<Course> { c3 };
-
-
-                    //s1.Courses = new List<Course> { c1, c3 };
-                    //s2.Courses = new List<Course> { c1, c2 };
-                    //s3.Courses = new List<Course> { c1 };
-                    //s4.Courses = new List<Course> { c2 };
-                    //s5.Courses = new List<Course> { c2, c3 };
-
-                    //l1.Students = new List<Student> { s1 };
-                    //l2.Students = new List<Student> { s2, s4 };
-
-
-
-
-                    //c1.Upsert();
-                    //c2.Upsert();
-                    //c3.Upsert();
-                    //s1.Upsert();
-                    //s2.Upsert();
-                    //s3.Upsert();
-                    //s4.Upsert();
-                    //s5.Upsert();
-                    //t1.Upsert();
-                    //t2.Upsert();
-                    //t3.Upsert();
-                    //t4.Upsert();
-                    //t5.Upsert();
-                    //l1.Upsert(56);
-                    //l2.Upsert(57);
-
             //        dc.SaveChanges();
             //    }
             //    catch (Exception e)

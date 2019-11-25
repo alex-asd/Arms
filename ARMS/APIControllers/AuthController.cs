@@ -50,13 +50,13 @@ namespace ARMS.APIControllers
             
             if (currentUser.TypeOfUser == "student")
             {
-                var student = StudentHelper.GetByUsername(user_name.Value);
-                return Ok<Student>(student);
+                var user = UserHelper.GetByUsername(user_name.Value);
+                return Ok<User>(user);
             }
             else if (currentUser.TypeOfUser == "teacher")
             {
-                var teacher = TeacherHelper.GetByUsername(user_name.Value);
-                return Ok<Teacher>(teacher);
+                var user = UserHelper.GetByUsername(user_name.Value);
+                return Ok<User>(user);
             }
             else
             {

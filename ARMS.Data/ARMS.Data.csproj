@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C8EFA12A-FB15-4B87-8B74-483BEE9574BA}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <RootNamespace>ARMS.Data</RootNamespace>
     <AssemblyName>ARMS.Data</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -33,6 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
@@ -75,7 +78,7 @@
     <Compile Include="ArmsContext.cs" />
     <Compile Include="Helpers\CourseHelper.cs" />
     <Compile Include="Helpers\LectureHelper.cs" />
-    <Compile Include="Helpers\StudentHelper.cs" />
+    <Compile Include="Helpers\UserHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Migrations\201911231105247_initialCreate.cs" />
     <Compile Include="Migrations\201911231105247_initialCreate.Designer.cs">
@@ -93,11 +96,16 @@
     <Compile Include="Migrations\201911231407168_update-models.Designer.cs">
       <DependentUpon>201911231407168_update-models.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911251525251_models-redesigned.cs" />
+    <Compile Include="Migrations\201911251525251_models-redesigned.Designer.cs">
+      <DependentUpon>201911251525251_models-redesigned.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Attendee.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Lecture.cs" />
-    <Compile Include="Models\Student.cs" />
-    <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\Participant.cs" />
+    <Compile Include="Models\Supervisor.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -118,6 +126,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911231407168_update-models.resx">
       <DependentUpon>201911231407168_update-models.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911251525251_models-redesigned.resx">
+      <DependentUpon>201911251525251_models-redesigned.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
