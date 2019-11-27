@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArmsContext.cs" />
+    <Compile Include="Helpers\BonusEnum.cs" />
     <Compile Include="Helpers\CourseHelper.cs" />
     <Compile Include="Helpers\LectureHelper.cs" />
     <Compile Include="Helpers\UserHelper.cs" />
@@ -99,6 +100,10 @@
     <Compile Include="Migrations\201911251525251_models-redesigned.cs" />
     <Compile Include="Migrations\201911251525251_models-redesigned.Designer.cs">
       <DependentUpon>201911251525251_models-redesigned.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911271425455_remove-username-from-user.cs" />
+    <Compile Include="Migrations\201911271425455_remove-username-from-user.Designer.cs">
+      <DependentUpon>201911271425455_remove-username-from-user.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendee.cs" />
@@ -129,6 +134,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911251525251_models-redesigned.resx">
       <DependentUpon>201911251525251_models-redesigned.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911271425455_remove-username-from-user.resx">
+      <DependentUpon>201911271425455_remove-username-from-user.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

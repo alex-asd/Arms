@@ -50,12 +50,12 @@ namespace ARMS.APIControllers
             
             if (currentUser.TypeOfUser == "student")
             {
-                var user = UserHelper.GetByUsername(user_name.Value);
+                var user = UserHelper.GetByEmail(user_name.Value);
                 return Ok<User>(user);
             }
             else if (currentUser.TypeOfUser == "teacher")
             {
-                var user = UserHelper.GetByUsername(user_name.Value);
+                var user = UserHelper.GetByEmail(user_name.Value);
                 return Ok<User>(user);
             }
             else

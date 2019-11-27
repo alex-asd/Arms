@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using ARMS.Data.Helpers;
 
 namespace ARMS.Data.Models
 {
@@ -31,7 +32,7 @@ namespace ARMS.Data.Models
         }
 
         #region Database Interactions
-        public bool Upsert()
+        public bool Upsert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
         {
             bool success = false;
             try
@@ -41,13 +42,13 @@ namespace ARMS.Data.Models
                     var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName.ToLower());
 
                     // Insert the new course to the DB
-                    if (sqlEntry == null)
+                    if (sqlEntry == null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Insert))
                     {
                         dc.Courses.Add(this);
                     }
 
                     // Update existing course
-                    if (sqlEntry != null)
+                    if (sqlEntry != null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Update))
                     {
                         sqlEntry.CourseName = this.CourseName;
                         sqlEntry.CourseDescription = this.CourseDescription;
@@ -63,6 +64,16 @@ namespace ARMS.Data.Models
                 var catchMsg = ex.Message;
             }
             return success;
+        }
+
+        public bool Insert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
+        {
+            return this.Upsert(BonusEnum.UpsertType.Insert);
+        }
+
+        public bool Update()
+        {
+            return this.Upsert(BonusEnum.UpsertType.Update);
         }
 
         public bool Delete()

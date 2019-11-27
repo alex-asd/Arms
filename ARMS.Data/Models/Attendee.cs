@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ARMS.Data.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -33,7 +34,7 @@ namespace ARMS.Data.Models
         }
 
         #region Database Interactions
-        public bool Upsert()
+        public bool Upsert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
         {
             bool success = false;
 
@@ -44,13 +45,13 @@ namespace ARMS.Data.Models
                     var sqlEntry = dc.Attendees.FirstOrDefault(x => x.AttendeeID == this.AttendeeID);
 
                     // Insert new attendee to DB
-                    if (sqlEntry == null)
+                    if (sqlEntry == null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Insert))
                     {
                         dc.Attendees.Add(this);
                     }
 
                     // Update existing entry
-                    if (sqlEntry != null)
+                    if (sqlEntry != null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Update))
                     {
                         sqlEntry.LectureID = this.LectureID;
                         sqlEntry.UserID = this.UserID;
@@ -64,6 +65,16 @@ namespace ARMS.Data.Models
                 var catchMsg = ex.Message;
             }
             return success;
+        }
+
+        public bool Insert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
+        {
+            return this.Upsert(BonusEnum.UpsertType.Insert);
+        }
+
+        public bool Update()
+        {
+            return this.Upsert(BonusEnum.UpsertType.Update);
         }
 
         public bool Delete()

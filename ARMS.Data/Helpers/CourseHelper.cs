@@ -92,5 +92,28 @@ namespace ARMS.Data.Helpers
                 return list;
             }
         }
+
+        // get courses for current user logged in
+        public static List<Course> GetCoursesForUser(User user)
+        {
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var list =
+                        from p in dc.Participants
+                        join c in dc.Courses on p.CourseID equals c.CourseID
+                        where p.UserID == user.UserID
+                        select c;
+
+                    return list.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return null;
+        }
     }
 }

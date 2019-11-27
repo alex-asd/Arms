@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ARMS.Data.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,11 +10,12 @@ namespace ARMS.Data.Models
 {
     public class User
     {
+        [NotMapped]
+        public static readonly string USER_STUDENT = "student";
+        [NotMapped]
+        public static readonly string USER_TEACHER = "teacher";
+
         public int UserID { get; set; }
-        [Required]
-        [Index(IsUnique = true)]
-        [MaxLength(50)]
-        public string Username { get; set; }
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
@@ -29,37 +31,35 @@ namespace ARMS.Data.Models
 
         public User() { }
 
-        public User(string firstName, string lastName, string email, string username, string type)
+        public User(string firstName, string lastName, string email, string type)
         {
             this.FirstName = firstName;
             this.LastName = lastName;
             this.Email = email;
-            this.Username = username.ToLower();
             this.Type = type;
         }
-
+        
         #region Database Interactions
-        public bool Upsert()
+        
+        public bool Upsert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
         {
             bool success = false;
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Users.FirstOrDefault(x => x.Username == this.Username.ToLower());
+                    var sqlEntry = dc.Users.FirstOrDefault(x => x.Email == this.Email);
 
-                    if (sqlEntry == null)
+                    if (sqlEntry == null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Insert))
                     {
                         // Insert the new user to the DB
-                        this.Username = Username.ToLower();
                         dc.Users.Add(this);
                     }
 
-                    if (sqlEntry != null)
+                    if (sqlEntry != null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Update))
                     {
                         sqlEntry.FirstName = this.FirstName.ToLower();
                         sqlEntry.LastName = this.LastName;
-                        sqlEntry.Username = this.Username;
                         sqlEntry.Type = this.Type;
                         sqlEntry.Email = this.Email;
                     }
@@ -75,6 +75,16 @@ namespace ARMS.Data.Models
             return success;
         }
 
+        public bool Insert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
+        {
+            return this.Upsert(BonusEnum.UpsertType.Insert);
+        }
+
+        public bool Update()
+        {
+            return this.Upsert(BonusEnum.UpsertType.Update);
+        }
+
         public bool Delete()
         {
             bool success = false;
@@ -82,7 +92,7 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Users.FirstOrDefault(x => x.Username == this.Username);
+                    var sqlEntry = dc.Users.FirstOrDefault(x => x.UserID == this.UserID);
                     dc.Users.Remove(sqlEntry);
 
                     dc.SaveChanges();
@@ -104,7 +114,7 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Users.FirstOrDefault(x => x.Username == this.Username);
+                    var sqlEntry = dc.Users.FirstOrDefault(x => x.Email == this.Email);
                     result = sqlEntry.UserID;
 
                     dc.SaveChanges();

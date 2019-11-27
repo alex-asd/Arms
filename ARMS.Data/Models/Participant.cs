@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ARMS.Data.Helpers;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -10,6 +11,11 @@ namespace ARMS.Data.Models
 {
     public class Participant
     {
+        [NotMapped]
+        public static readonly string STATUS_ACTIVE = "active";
+        [NotMapped]
+        public static readonly string STATUS_PENDING = "pending";
+
         public string ParticipantStatus { get; set; }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,7 +37,7 @@ namespace ARMS.Data.Models
         }
 
         #region Database Interactions
-        public bool Upsert()
+        public bool Upsert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
         {
             bool success = false;
 
@@ -41,15 +47,14 @@ namespace ARMS.Data.Models
                 {
                     var sqlEntry = dc.Participants.FirstOrDefault(x => x.ParticipantID == this.ParticipantID);
 
-                    // Insert new lecture to DB
-                    if (sqlEntry == null)
+                    // Insert new participant to DB
+                    if (sqlEntry == null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Insert))
                     {
-                        // Insert the new lecture to the db
                         dc.Participants.Add(this);
                     }
 
                     // Update existing entry
-                    if (sqlEntry != null)
+                    if (sqlEntry != null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Update))
                     {
                         sqlEntry.CourseID = this.CourseID;
                         sqlEntry.UserID = this.UserID;
@@ -63,6 +68,16 @@ namespace ARMS.Data.Models
                 var catchMsg = ex.Message;
             }
             return success;
+        }
+
+        public bool Insert(BonusEnum.UpsertType upsertType = BonusEnum.UpsertType.Upsert)
+        {
+            return this.Upsert(BonusEnum.UpsertType.Insert);
+        }
+
+        public bool Update()
+        {
+            return this.Upsert(BonusEnum.UpsertType.Update);
         }
 
         public bool Delete()

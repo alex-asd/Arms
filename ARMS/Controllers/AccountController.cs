@@ -9,6 +9,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ARMS.Models;
+using ARMS.Data.Helpers;
+using ARMS.Data.Models;
+using ARMS.Data;
 
 namespace ARMS.Controllers
 {
@@ -152,6 +155,10 @@ namespace ARMS.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, TypeOfUser = model.TypeOfUser };
+
+                var dataUser = new User(model.FirstName, model.LastName, model.Email, model.TypeOfUser);
+                dataUser.Insert();
+
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

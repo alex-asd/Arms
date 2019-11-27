@@ -19,17 +19,15 @@ namespace ARMS.Data.Helpers
             var model = Get(userId);
             return model;
         }
-
-        // get User by username
-        public static User GetByUsername(string username)
+      
+        public static User GetByEmail(string email)
         {
-            var lowUsername = username.ToLower();
-            var model = Get(0, lowUsername);
+            var model = Get(0, email);
             return model;
         }
 
         // get the actual User object
-        private static User Get(int userId = 0, string username = null)
+        private static User Get(int userId = 0, string email = null)
         {
             User model = null;
 
@@ -42,9 +40,9 @@ namespace ARMS.Data.Helpers
                     {
                         model = dc.Users.FirstOrDefault(x => x.UserID == userId);
                     }
-                    else if (username != null)
+                    else if(email != null)
                     {
-                        model = dc.Users.FirstOrDefault(x => x.Username == username);
+                        model = dc.Users.FirstOrDefault(x => x.Email == email);
                     }
                 }
             }
@@ -55,24 +53,23 @@ namespace ARMS.Data.Helpers
             return model;
         }
 
-        // returns whether there is a User with such username in the DB
-        public static bool IsRegistered(string username, string email)
+        // returns whether there is a User with such email in the DB
+        public static bool IsRegistered(string email)
         {
-            var lowerUsername = username.ToLower();
             using (var dc = new ArmsContext())
             {
-                return !dc.Users.Any(u => u.Username == lowerUsername);
+                return !dc.Users.Any(u => u.Email == email);
             }
         }
 
         // deletes a User with the targeted username
-        public static void DeleteUser(string username)
+        public static void DeleteUser(string email)
         {
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var User = dc.Users.Where(u => u.Username == username.ToLower()).FirstOrDefault();
+                    var User = dc.Users.Where(u => u.Email == email).FirstOrDefault();
                     dc.Users.Remove(User);
 
                     dc.SaveChanges();
