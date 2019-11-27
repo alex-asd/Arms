@@ -13,7 +13,7 @@ namespace ARMS.Data.Helpers
     public static class LectureHelper
     {
         // get lecture by id
-        private static Lecture GetById(int LectureId)
+        public static Lecture GetById(int LectureId)
         {
             Lecture model = null;
 

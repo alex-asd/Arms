@@ -46,7 +46,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ARMS.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>Bin\ARMS.Data.exe</HintPath>
+      <HintPath>..\ARMS.Data\bin\Debug\ARMS.Data.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -195,6 +195,7 @@
   <ItemGroup>
     <Compile Include="APIControllers\AuthController.cs" />
     <Compile Include="APIControllers\CourseAPIController.cs" />
+    <Compile Include="APIControllers\LectureAPIController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
