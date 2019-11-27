@@ -1,21 +1,19 @@
-﻿using ARMS.ViewModel;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using System.Xml.XPath;
+using ARMS.Data.Helpers;
 using ARMS.Data.Models;
 using ARMS.Models;
-using Microsoft.AspNet.Identity;
-using ARMS.Data.Helpers;
+using ARMS.ViewModel;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ARMS.APIControllers
 {
@@ -43,25 +41,7 @@ namespace ARMS.APIControllers
 
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
             var currentUser = userManager.FindByEmailAsync(user_email.Value).Result;
-            if (currentUser == null)
-            {
-                return Unauthorized();
-            }
-            
-            if (currentUser.TypeOfUser == "student")
-            {
-                var user = UserHelper.GetByEmail(user_name.Value);
-                return Ok<User>(user);
-            }
-            else if (currentUser.TypeOfUser == "teacher")
-            {
-                var user = UserHelper.GetByEmail(user_name.Value);
-                return Ok<User>(user);
-            }
-            else
-            {
-                return Conflict();
-            }
+            return Ok<ApplicationUser>(currentUser);
         }
 
 
@@ -102,6 +82,7 @@ namespace ARMS.APIControllers
 
         [HttpPost]
         [Route("login")]
+        [AllowAnonymous]
         public IHttpActionResult Authenticate([FromBody] LoginVM loginVM)
         {
             if (loginVM == null)
@@ -140,9 +121,7 @@ namespace ARMS.APIControllers
             }
 
             // if credentials are not valid send unauthorized status code in response
-            loginResponse.responseMsg.StatusCode = HttpStatusCode.Unauthorized;
-            IHttpActionResult response = ResponseMessage(loginResponse.responseMsg);
-            return response;
+            return Unauthorized();
         }
 
 
@@ -164,7 +143,7 @@ namespace ARMS.APIControllers
             });
 
             const string secrectKey = "your secret key goes here";
-            var securityKey = new SymmetricSecurityKey(System.Text.Encoding.Default.GetBytes(secrectKey));
+            var securityKey = new SymmetricSecurityKey(Encoding.Default.GetBytes(secrectKey));
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256Signature);
 
 
