@@ -10,12 +10,15 @@ namespace ARMS.Data.Models
 {
     public class Course
     {
+        [Display(Name = "Course ID")]
         public int CourseID { get; set; }
         [Required]
         [Index(IsUnique = true)]
         [MaxLength(300)]
+        [Display(Name = "Course Name")]
         public string CourseName { get; set; }
         [MaxLength(200)]
+        [Display(Name = "Course Description")]
         public string CourseDescription { get; set; }
 
         public int CreatorID { get; set; }

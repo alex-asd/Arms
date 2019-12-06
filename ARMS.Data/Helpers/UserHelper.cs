@@ -56,10 +56,19 @@ namespace ARMS.Data.Helpers
         // returns whether there is a User with such email in the DB
         public static bool IsRegistered(string email)
         {
-            using (var dc = new ArmsContext())
+            bool isReg = false;
+            try
             {
-                return !dc.Users.Any(u => u.Email == email);
+                using (var dc = new ArmsContext())
+                {
+                    isReg = !dc.Users.Any(u => u.Email == email);
+                }
             }
+            catch(Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return isReg;
         }
 
         // deletes a User with the targeted username

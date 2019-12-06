@@ -11,15 +11,18 @@ namespace ARMS.Data.Models
 {
     public class Attendee
     {
+        [Display(Name = "Bluetooth Address")]
         public string BluetoothAddress { get; set; }
-        [Key]
+        [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AttendeeID { get; set; }
 
-
-        public int UserID { get; set; }     
+        [Key, Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int UserID { get; set; }
+        [Key, Column(Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int LectureID { get; set; }
-
 
         public virtual User User { get; set; }
         public virtual Lecture Lecture { get; set; }

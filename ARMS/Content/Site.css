@@ -87,6 +87,14 @@ hr {
     text-align: justify;
 }
 
+.article-two {
+    background-color: inherit;
+    color: #ddd;
+    text-align: center;
+    padding: 40px 80px;
+    text-align: justify;
+}
+
 footer {
     padding-left: 15px !important;
     padding-right: 15px !important;
@@ -95,24 +103,56 @@ footer {
 }
 
 .container {
-    width: 100% !important;
+    width: 90% !important;
     color: #fff;
 }
 
-/*.navbar-brand{
-    height: 54px;
-    font-size: 22px;
+.dropdown-main-menu {
+    height: 50px;
 }
 
-.navbar-nav li{
-    height: 54px;
-    font-size: 18px;
+.modal-title, .modal-body label {
+    color: #333;
 }
-
-.navbar-nav li a{
-    height: inherit;
-    font-size: inherit;
-}*/
 
 
 /*CUSTOM CSS*/
+
+.custom-table {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.custom-table td, .custom-table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.custom-table tr:nth-child(even){background-color: #282E34;}
+
+.custom-table tr:hover {background-color: #ddd; color: #222;}
+
+.custom-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #5c5c5b;
+    color: white;
+}
+
+.gi-12x {
+    font-size: 1.2em;
+}
+
+.gi-15x {
+    font-size: 1.5em;
+}
+
+.gi-2x {
+    font-size: 2em;
+}
+
+.gi-3x {
+    font-size: 3em;
+}

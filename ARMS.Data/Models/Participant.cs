@@ -16,12 +16,17 @@ namespace ARMS.Data.Models
         [NotMapped]
         public static readonly string STATUS_PENDING = "pending";
 
+        [Display(Name = "Participant Status")]
         public string ParticipantStatus { get; set; }
-        [Key]
+        [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ParticipantID { get; set; }
 
+        [Key, Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UserID { get; set; }
+        [Key, Column(Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CourseID { get; set; }
         
         public virtual User User { get; set; }

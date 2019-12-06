@@ -1,4 +1,5 @@
 ﻿@model ARMS.Data.Models.Course
+@using ARMS.Helpers
 
 @{
     ViewBag.Title = "Delete";
@@ -13,11 +14,11 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Creator.Username)
+            @Html.DisplayNameFor(model => model.Creator.LastName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Creator.Username)
+            @Html.DisplayFor(model => model.Creator.LastName)
         </dd>
 
         <dt>
@@ -43,7 +44,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List", "Index", new { userId = CurrentWebContext.CurrentUser.UserID })
         </div>
     }
 </div>

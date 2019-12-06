@@ -12,6 +12,7 @@ using ARMS.Models;
 using ARMS.Data.Helpers;
 using ARMS.Data.Models;
 using ARMS.Data;
+using ARMS.Helpers;
 
 namespace ARMS.Controllers
 {
@@ -158,7 +159,7 @@ namespace ARMS.Controllers
 
                 var dataUser = new User(model.FirstName, model.LastName, model.Email, model.TypeOfUser);
                 dataUser.Insert();
-
+                
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

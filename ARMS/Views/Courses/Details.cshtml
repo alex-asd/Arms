@@ -1,8 +1,11 @@
-﻿@model ARMS.Data.Models.Course
+﻿@model ARMS.ViewModel.DetailedCourseVM
+@using ARMS.Helpers
+@using ARMS.Data.Helpers
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var list = SupervisorHelper.GetParticipantsForCourse(Model.CourseID);
 }
 
 <h2>Details</h2>
@@ -12,11 +15,12 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Creator.Username)
+            @Html.DisplayNameFor(model => model.Creator.LastName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Creator.Username)
+            @Html.DisplayFor(model => model.Creator.FirstName)
+            @Html.DisplayFor(model => model.Creator.LastName)
         </dd>
 
         <dt>
@@ -34,10 +38,100 @@
         <dd>
             @Html.DisplayFor(model => model.CourseDescription)
         </dd>
-
+        @if (CurrentWebContext.CurrentUser.Type == "student")
+        {
+            <dt>Your attendance:</dt>
+            <dd style="text-decoration: underline;">
+                Performance: @ParticipantHelper.GetParticipantAttendance(CurrentWebContext.CurrentUser.UserID, Model.CourseID)%
+            </dd>
+        }
     </dl>
+
+    @if (CurrentWebContext.CurrentUser.Type == "teacher")
+    {
+        <h4>List of Supervisors</h4>
+        <table class="custom-table">
+            <tr>
+                <th>
+                    Supervisor's Name
+                </th>
+                <th>
+                    Email
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Supervisors)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <h4>List of Students</h4>
+        <table class="custom-table">
+            <tr>
+                <th>
+                    Student Name
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Attendance
+                </th>
+            </tr>
+
+            @foreach (var item in Model.Participants)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        insert performance here
+                    </td>
+                </tr>
+            }
+        </table>
+
+        <h4>Scheduled Lectures</h4>
+        <table class="custom-table">
+            <tr>
+                <th>From</th>
+                <th>To</th>
+            </tr>
+
+            @foreach (var item in Model.Lectures)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.From)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.To)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @if (CurrentWebContext.CurrentUser.Type == "teacher")
+    {
+        @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) 
+        <span>|</span>
+    }
+    @Html.ActionLink("Back to List", "Index", new { userId = CurrentWebContext.CurrentUser.UserID })
 </p>

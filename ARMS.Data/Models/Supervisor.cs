@@ -10,11 +10,15 @@ namespace ARMS.Data.Models
 {
     public class Supervisor
     {
-        [Key]
+        [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int SupervisorID { get; set; }
 
+        [Key, Column(Order = 1)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int UserID { get; set; }
+        [Key, Column(Order = 2)]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public int CourseID { get; set; }
 
         public virtual User User { get; set; }

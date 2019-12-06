@@ -93,19 +93,34 @@ namespace ARMS.Data.Helpers
             }
         }
 
-        // get courses for current user logged in
-        public static List<Course> GetCoursesForUser(User user)
+        // get courses for current student logged in
+        public static List<Course> GetCoursesForParticipant(int userId)
         {
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var list =
-                        from p in dc.Participants
-                        join c in dc.Courses on p.CourseID equals c.CourseID
-                        where p.UserID == user.UserID
-                        select c;
+                    var list = dc.Participants.Where(ps => ps.UserID == userId).Select(ps => ps.Course).Include(c => c.Creator).ToList();
+                    
+                    return list.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return null;
+        }
 
+        // get courses for current teacher logged in
+        public static List<Course> GetCoursesForSupervisor(int userId)
+        {
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var list = dc.Supervisors.Where(ps => ps.UserID == userId).Select(ps => ps.Course).Include(c => c.Creator).ToList();
+                    
                     return list.ToList();
                 }
             }

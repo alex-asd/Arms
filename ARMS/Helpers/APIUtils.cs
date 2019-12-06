@@ -16,7 +16,7 @@ namespace ARMS.Helpers
                 throw new Exception("Was unable to find the user name.");
             }
 
-            var teacher = TeacherHelper.GetByUsername(userName);
+            //var teacher = USer.GetByUsername(userName);
 //
 //            var targetCourse = CourseHelper.GetById(courseId);
 //            if (targetCourse != null)

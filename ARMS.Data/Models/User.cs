@@ -18,13 +18,16 @@ namespace ARMS.Data.Models
         public int UserID { get; set; }
         [Required]
         [MaxLength(50)]
+        [Display(Name = "Course creator")]
         public string LastName { get; set; }
         [Required]
         [MaxLength(50)]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
         [Required]
         [Index(IsUnique = true)]
         [MaxLength(50)]
+        [Display(Name = "Email")]
         public string Email { get; set; }
         [Required]
         public string Type { get; set; }

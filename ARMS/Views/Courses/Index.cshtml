@@ -1,19 +1,37 @@
 ﻿@model IEnumerable<ARMS.Data.Models.Course>
+@using ARMS.Helpers
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+@if (CurrentWebContext.CurrentUser.Type == "student")
+{
+<div class="input-group">
+    <input type="text" class="form-control" placeholder="Course name" aria-describedby="course-search-input">
+    <button type="button" class="btn btn-default">
+        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+    </button>
+</div>
+<br />
+<h2>The courses you are enrolled for:</h2>
+}
+
+@if (CurrentWebContext.CurrentUser.Type == "teacher")
+{
+<h2>The courses that you manage:</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+}
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Creator.Username)
+            <!-- Course creator comes from display name in user model -->
+            @Html.DisplayNameFor(model => model.Creator.LastName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.CourseName)
@@ -24,10 +42,12 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+    @foreach (var item in Model)
+    {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Creator.Username)
+            @Html.DisplayFor(modelItem => item.Creator.FirstName)
+            @Html.DisplayFor(modelItem => item.Creator.LastName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.CourseName)
@@ -35,12 +55,44 @@
         <td>
             @Html.DisplayFor(modelItem => item.CourseDescription)
         </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CourseID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CourseID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CourseID })
-        </td>
+        @if (CurrentWebContext.CurrentUser.Type == "teacher")
+        {
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CourseID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.CourseID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CourseID })
+            </td>
+        }
+
+        @if (CurrentWebContext.CurrentUser.Type == "student")
+        {
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.CourseID })
+            </td>
+        }
     </tr>
-}
+    }
 
 </table>
+
+@*<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#searchModal">
+        Launch demo modal
+    </button>*@
+
+<!-- Search Modal -->
+@*<div class="modal fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Search for specific course</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>*@

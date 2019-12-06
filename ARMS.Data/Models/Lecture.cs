@@ -15,8 +15,9 @@ namespace ARMS.Data.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int LectureID { get; set; }
+        [Display(Name = "Check-in")]
         public bool CheckInEnabled { get; set; }
-
+        
         [Required]
         public int CourseID { get; set; }
 

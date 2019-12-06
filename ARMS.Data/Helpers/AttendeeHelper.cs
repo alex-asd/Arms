@@ -10,18 +10,18 @@ using ARMS.Data.Models;
 
 namespace ARMS.Data.Helpers
 {
-    public static class LectureHelper
+    public static class AttendeeHelper
     {
-        // get lecture by id
-        public static Lecture GetById(int LectureId)
+        // get Attendee by id
+        public static Attendee GetById(int attendeeId)
         {
-            Lecture model = null;
+            Attendee model = null;
 
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    model = dc.Lectures.Include(x => x.Course).FirstOrDefault(x => x.LectureID == LectureId);
+                    model = dc.Attendees.Include(x => x.User).Include(x => x.Lecture).FirstOrDefault(x => x.AttendeeID == attendeeId);
                 }
             }
             catch (Exception ex)
@@ -31,15 +31,15 @@ namespace ARMS.Data.Helpers
             return model;
         }
 
-        // deletes a lecture with the targeted id
-        public static void DeleteLecture(int lectureId)
+        // deletes a attendee with the targeted id
+        public static void DeleteAttendee(int userId)
         {
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var lecture = dc.Lectures.Where(u => u.LectureID == lectureId).FirstOrDefault();
-                    dc.Lectures.Remove(lecture);
+                    var att = dc.Attendees.Where(u => u.UserID == userId).FirstOrDefault();
+                    dc.Attendees.Remove(att);
 
                     dc.SaveChanges();
                 }
@@ -51,11 +51,11 @@ namespace ARMS.Data.Helpers
         }
 
         // for testing purposes
-        public static List<Lecture> GetAllLectures()
+        public static List<Attendee> GetAllLectures()
         {
             using (var dc = new ArmsContext())
             {
-                var list = dc.Lectures.Include(x => x.Course).ToList();
+                var list = dc.Attendees.Include(x => x.User).Include(x => x.Lecture).ToList();
                 return list;
             }
         }
