@@ -2,6 +2,7 @@
 using ARMS.Data.Helpers;
 using ARMS.Data.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Web.Http;
@@ -22,6 +23,26 @@ namespace ARMS.APIControllers
             return Ok<Lecture>(lecture);
         }
 
+
+        [HttpPost]
+        [Authorize]
+        [Route("add")]
+        public IHttpActionResult AddLecture(Lecture lecture)
+        {
+            lecture.Insert(BonusEnum.UpsertType.Insert);
+            var id = lecture.GetLectureID();
+            return Ok(id);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("update")]
+        public IHttpActionResult UpdateLecture(Lecture lecture)
+        {
+            lecture.Update();
+            return Ok();
+        }
+
         [HttpGet]
         [Authorize]
         [Route("forstudent")]
@@ -38,8 +59,8 @@ namespace ARMS.APIControllers
                 return Ok<List<Lecture>>(courses_lectures.ToList());
             }
         }
-        
-        
+
+
         [HttpGet]
         [Authorize]
         [Route("forteacher")]
@@ -50,9 +71,23 @@ namespace ARMS.APIControllers
             {
                 var supervisions = dc.Supervisors.Where(x => x.SupervisorID == curr_user.UserID)
                     .Select(x => x.CourseID);
-                var supervised_courses=
-                    dc.Courses.Where(x => supervisions.Contains(x.CourseID));
-                return Ok<List<Course>>(supervised_courses.ToList());
+                var supervised_courses =
+                    dc.Courses.Where(x => supervisions.Contains(x.CourseID)).ToList();
+                return Ok();
+            }
+        }
+
+        [HttpGet]
+        [Authorize]
+        [Route("for-course")]
+        public IHttpActionResult GetForCourse(int id)
+        {
+            var course = CourseHelper.GetById(id);
+            using (var dc = new ArmsContext())
+            {
+                dc.Configuration.LazyLoadingEnabled = false;
+                var lectures = dc.Lectures.Include(x => x.Course).Where(x => x.CourseID == course.CourseID);
+                return Ok(lectures.ToList());
             }
         }
 
@@ -74,7 +109,7 @@ namespace ARMS.APIControllers
                 return Ok<List<Lecture>>(active_lectures.ToList());
             }
         }
-        
+
         [HttpGet]
         [Authorize]
         [Route("activeforteacher")]

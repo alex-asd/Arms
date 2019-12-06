@@ -196,6 +196,7 @@
     <Compile Include="APIControllers\AuthController.cs" />
     <Compile Include="APIControllers\CourseAPIController.cs" />
     <Compile Include="APIControllers\LectureAPIController.cs" />
+    <Compile Include="APIControllers\ParticipantApiController.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />

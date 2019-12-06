@@ -1,6 +1,7 @@
 ﻿using ARMS.Data.Helpers;
 using ARMS.Data.Models;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
@@ -30,11 +31,20 @@ namespace ARMS.APIControllers
             var curr_user = UserHelper.GetById(id);
             using (var dc = new ArmsContext())
             {
-                var participations = dc.Participants.Where(x => x.ParticipantID == curr_user.UserID)
-                    .Select(x => x.CourseID);
-                var participating_courses =
-                    dc.Courses.Where(x => participations.Contains(x.CourseID));
-                return Ok<List<Course>>(participating_courses.ToList());
+                dc.Configuration.LazyLoadingEnabled = false;
+                if (curr_user.Type == "student")
+                {
+                    var participations = dc.Participants.Include(x => x.Course).Include(x => x.User)
+                        .Where(x => x.UserID == curr_user.UserID);
+                    return Ok(participations.ToList());
+                }
+
+                if (curr_user.Type == "teacher")
+                {
+                    var supervisions = dc.Supervisors.Include(x => x.Course).Include(x => x.User)
+                        .Where(x => x.UserID == curr_user.UserID);
+                    return Ok(supervisions.ToList());
+                }
             }
 
             return Ok();
@@ -49,7 +59,8 @@ namespace ARMS.APIControllers
             List<Course> resultCourses = null;
             using (var dc = new ArmsContext())
             {
-                var searchCourses = dc.Courses.Where(course => course.CourseName.ToLower().Contains(name.ToLower()));
+                var searchCourses = dc.Courses.Include(m => m.Creator)
+                    .Where(course => course.CourseName.ToLower().Contains(name.ToLower()));
                 resultCourses = searchCourses.ToList();
                 return Ok(resultCourses);
             }
@@ -76,10 +87,12 @@ namespace ARMS.APIControllers
         {
             bool success = false;
             success = courseToAdd.Insert();
-
+            var id = courseToAdd.GetCourseID();
+            Supervisor sup = new Supervisor(courseToAdd.CreatorID, id);
+            sup.Insert(BonusEnum.UpsertType.Insert);
             if (success)
             {
-                return Ok();
+                return Ok(id);
             }
 
             return BadRequest();
@@ -94,7 +107,7 @@ namespace ARMS.APIControllers
             {
                 return Unauthorized();
             }
-            
+
             using (var dc = new ArmsContext())
             {
                 dc.Supervisors.Add(new Supervisor(userToAdd.UserID, courseToAddTo.CourseID));
