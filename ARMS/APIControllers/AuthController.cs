@@ -39,9 +39,8 @@ namespace ARMS.APIControllers
                 return Unauthorized();
             }
 
-            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            var currentUser = userManager.FindByEmailAsync(user_email.Value).Result;
-            return Ok<ApplicationUser>(currentUser);
+            var user = UserHelper.GetByEmail(user_email.Value);
+            return Ok<User>(user);
         }
 
 
@@ -64,9 +63,11 @@ namespace ARMS.APIControllers
             }
 
             var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            //TODO: CREATE Student/Teacher after user based on type.
             var user = new ApplicationUser
                 {UserName = registrationVm.Email, Email = registrationVm.Email, TypeOfUser = registrationVm.TypeOfUser};
+            var data_user = new User(registrationVm.FirstName, registrationVm.LastName, registrationVm.Email,
+                registrationVm.TypeOfUser);
+            data_user.Upsert();
             var result = await userManager.CreateAsync(user, registrationVm.Password);
             if (result.Succeeded)
             {
