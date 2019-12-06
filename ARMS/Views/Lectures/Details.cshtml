@@ -1,4 +1,4 @@
-﻿@model ARMS.Data.Models.Participant
+﻿@model ARMS.Data.Models.Lecture
 
 @{
     ViewBag.Title = "Details";
@@ -8,7 +8,7 @@
 <h2>Details</h2>
 
 <div>
-    <h4>Participant</h4>
+    <h4>Lecture</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -20,24 +20,32 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.User.Username)
+            @Html.DisplayNameFor(model => model.From)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.User.Username)
+            @Html.DisplayFor(model => model.From)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ParticipantStatus)
+            @Html.DisplayNameFor(model => model.To)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.ParticipantStatus)
+            @Html.DisplayFor(model => model.To)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckInEnabled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckInEnabled)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ParticipantID }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.LectureID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

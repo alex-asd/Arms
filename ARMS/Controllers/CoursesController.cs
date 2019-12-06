@@ -129,16 +129,12 @@ namespace ARMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseID,CourseName,CourseDescription,CreatorID, Supervisors, Participants, Lectures")] DetailedCourseVM model)
         {
-            var list = model.Supervisors;
-            var bo = true;
-            //if (ModelState.IsValid)
-            //{
-            //    db.Entry(course).State = EntityState.Modified;
-            //    db.SaveChanges();
-            //    return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
-            //}
-            //ViewBag.CreatorID = new SelectList(db.Users, "UserID", "LastName", course.CreatorID);
-            //return View(course);
+            if (ModelState.IsValid)
+            {
+                var course = new Course() { CourseID = model.CourseID, CourseName = model.CourseName, CourseDescription = model.CourseDescription, CreatorID = model.CreatorID, Creator = model.Creator};
+                course.Update();
+            }
+
             return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
         }
 

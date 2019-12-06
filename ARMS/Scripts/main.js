@@ -135,11 +135,6 @@ $('.async-add').click(function (e) {
             var email = modal.find('input[name="inputParticipantEmail"]').val();
             url = '{0}?courseId={1}&email={2}'.format(href, encodeURIComponent(courseId), encodeURIComponent(email));
             break;
-        case 'lecture':
-            var dateFrom = modal.find('input[name="dateFrom"]').val();
-            var dateTo = modal.find('input[name="dateTo"]').val();
-            url = '{0}?courseId={1}&dateFrom={2}&dateTo={3}'.format(href, encodeURIComponent(courseId), encodeURIComponent(dateFrom), encodeURIComponent(dateTo));
-            break;
         default:
     }
 

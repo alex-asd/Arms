@@ -8,119 +8,116 @@ using System.Web;
 using System.Web.Mvc;
 using ARMS.Data;
 using ARMS.Data.Models;
+using ARMS.Data.Helpers;
 
 namespace ARMS.Controllers
 {
-    public class ParticipantsController : Controller
+    public class LecturesController : Controller
     {
         private ArmsContext db = new ArmsContext();
 
-        // GET: Participants
-        public ActionResult Index()
+        // GET: Lectures
+        public ActionResult Index(int courseId)
         {
-            var participants = db.Participants.Include(p => p.Course).Include(p => p.User);
-            return View(participants.ToList());
+            var lectures = LectureHelper.GetLecturesForCourse(courseId);
+            return View(lectures);
         }
 
-        // GET: Participants/Details/5
+        // GET: Lectures/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Participant participant = db.Participants.Find(id);
-            if (participant == null)
+            Lecture lecture = db.Lectures.Find(id);
+            if (lecture == null)
             {
                 return HttpNotFound();
             }
-            return View(participant);
+            return View(lecture);
         }
 
-        // GET: Participants/Create
+        // GET: Lectures/Create
         public ActionResult Create()
         {
             ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username");
             return View();
         }
 
-        // POST: Participants/Create
+        // POST: Lectures/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ParticipantID,ParticipantStatus,UserID,CourseID")] Participant participant)
+        public ActionResult Create([Bind(Include = "LectureID,From,To,CheckInEnabled,CourseID")] Lecture lecture)
         {
             if (ModelState.IsValid)
             {
-                db.Participants.Add(participant);
+                db.Lectures.Add(lecture);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", lecture.CourseID);
             }
 
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", participant.CourseID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", participant.UserID);
-            return View(participant);
+            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", lecture.CourseID);
+            return View(lecture);
         }
 
-        // GET: Participants/Edit/5
+        // GET: Lectures/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Participant participant = db.Participants.Find(id);
-            if (participant == null)
+            Lecture lecture = db.Lectures.Find(id);
+            if (lecture == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", participant.CourseID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", participant.UserID);
-            return View(participant);
+            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", lecture.CourseID);
+            return View(lecture);
         }
 
-        // POST: Participants/Edit/5
+        // POST: Lectures/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ParticipantID,ParticipantStatus,UserID,CourseID")] Participant participant)
+        public ActionResult Edit([Bind(Include = "LectureID,From,To,CheckInEnabled,CourseID")] Lecture lecture)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(participant).State = EntityState.Modified;
+                db.Entry(lecture).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", lecture.CourseID);
             }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", participant.CourseID);
-            ViewBag.UserID = new SelectList(db.Users, "UserID", "Username", participant.UserID);
-            return View(participant);
+            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", lecture.CourseID);
+            return View(lecture);
         }
 
-        // GET: Participants/Delete/5
+        // GET: Lectures/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Participant participant = db.Participants.Find(id);
-            if (participant == null)
+            Lecture lecture = db.Lectures.Find(id);
+            if (lecture == null)
             {
                 return HttpNotFound();
             }
-            return View(participant);
+            return View(lecture);
         }
 
-        // POST: Participants/Delete/5
+        // POST: Lectures/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Participant participant = db.Participants.Find(id);
-            db.Participants.Remove(participant);
+            Lecture lecture = db.Lectures.Find(id);
+            db.Lectures.Remove(lecture);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

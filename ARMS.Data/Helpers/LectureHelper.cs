@@ -59,5 +59,24 @@ namespace ARMS.Data.Helpers
                 return list;
             }
         }
+
+        // get lectures for a course
+        public static List<Lecture> GetLecturesForCourse(int courseId)
+        {
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var list = dc.Lectures.Where(l => l.CourseID == courseId).Include(x => x.Course).ToList();
+
+                    return list.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return null;
+        }
     }
 }

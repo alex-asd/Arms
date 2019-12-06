@@ -117,9 +117,7 @@
         <!--List of lectures-->
         <div class="form-group">
             <h4>Scheduled Lectures</h4>
-            <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addLectureModal">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
-            </button>
+            @Html.ActionLink("Edit Lectures", "Index", "Lectures", new { courseId = Model.CourseID }, new { @class = "btn btn-default" })
             <table class="custom-table">
                 <tr>
                     <th>From</th>
@@ -195,7 +193,7 @@
 </div>
 
 <!-- Add Lecture Modal -->
-<div class="modal fade" id="addLectureModal" tabindex="-1" role="dialog" aria-labelledby="addLectureModalLabel" aria-hidden="true">
+<!--<div class="modal fade" id="addLectureModal" tabindex="-1" role="dialog" aria-labelledby="addLectureModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -216,7 +214,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
