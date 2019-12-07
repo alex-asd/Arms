@@ -63,6 +63,7 @@ namespace ARMS.Data.Models
                         sqlEntry.To = this.To;
                         sqlEntry.CheckInEnabled = this.CheckInEnabled;
                         sqlEntry.CourseID = this.CourseID;
+                        sqlEntry.CheckInBluetoothAddress = this.CheckInBluetoothAddress;
                     }
                     dc.SaveChanges();
                 }

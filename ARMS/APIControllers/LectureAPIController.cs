@@ -55,11 +55,11 @@ namespace ARMS.APIControllers
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
-                var participations = dc.Participants.Where(x => x.UserID == curr_user.UserID)
+                var participations = dc.Participants
+                    .Where(x => x.UserID == curr_user.UserID && x.ParticipantStatus == "active")
                     .Select(x => x.CourseID).ToList();
                 var courses_lectures = dc.Lectures.Include(x => x.Course).Where(x =>
-                    participations.Contains(x.CourseID) && x.From.CompareTo(DateTime.Now) >= 0 ||
-                    (x.To.CompareTo(DateTime.Now) >= 0 && x.From.CompareTo(DateTime.Now) <= 0));
+                    participations.Contains(x.CourseID) && x.To.CompareTo(DateTime.Now) >= 0);
                 return Ok<List<Lecture>>(courses_lectures.ToList());
             }
         }
@@ -77,8 +77,7 @@ namespace ARMS.APIControllers
                 var supervisions = dc.Supervisors.Where(x => x.UserID == curr_user.UserID)
                     .Select(x => x.CourseID).ToList();
                 var upcmoning_lectures = dc.Lectures.Include(x => x.Course)
-                    .Where(x => supervisions.Contains(x.CourseID) && x.From.CompareTo(DateTime.Now) >= 0 ||
-                                (x.To.CompareTo(DateTime.Now) >= 0 && x.From.CompareTo(DateTime.Now) <= 0))
+                    .Where(x => supervisions.Contains(x.CourseID)  && x.To.CompareTo(DateTime.Now) >= 0)
                     .ToList();
                 return Ok(upcmoning_lectures);
             }
@@ -106,12 +105,13 @@ namespace ARMS.APIControllers
             var curr_user = UserHelper.GetById(id);
             using (var dc = new ArmsContext())
             {
+                dc.Configuration.LazyLoadingEnabled = false;
                 var participations = dc.Participants.Where(x => x.UserID == curr_user.UserID)
                     .Select(x => x.CourseID).ToList();
-                var active_lectures = dc.Lectures.Where(x =>
-                    participations.Contains(x.CourseID) && DateTime.Now.CompareTo(x.From) >= 0 &&
-                    DateTime.Now.CompareTo(x.To) <= 0);
-                return Ok<List<Lecture>>(active_lectures.ToList());
+                var active_lectures = dc.Lectures.Include(x => x.Course).FirstOrDefault(x =>
+                    participations.Contains(x.CourseID) && x.To.CompareTo(DateTime.Now) >= 0 &&
+                    x.From.CompareTo(DateTime.Now) <= 0);
+                return Ok<Lecture>(active_lectures);
             }
         }
 
@@ -123,12 +123,13 @@ namespace ARMS.APIControllers
             var curr_user = UserHelper.GetById(id);
             using (var dc = new ArmsContext())
             {
+                dc.Configuration.LazyLoadingEnabled = false;
                 var supervisions = dc.Supervisors.Where(x => x.UserID == curr_user.UserID)
                     .Select(x => x.CourseID).ToList();
-                var active_lectures = dc.Lectures.Where(x =>
-                    supervisions.Contains(x.CourseID) && DateTime.Now.CompareTo(x.From) >= 0 &&
-                    DateTime.Now.CompareTo(x.To) <= 0);
-                return Ok<List<Lecture>>(active_lectures.ToList());
+                var active_lectures = dc.Lectures.Include(x => x.Course).FirstOrDefault(x =>
+                    supervisions.Contains(x.CourseID) && x.To.CompareTo(DateTime.Now) >= 0 &&
+                    x.From.CompareTo(DateTime.Now) <= 0);
+                return Ok<Lecture>(active_lectures);
             }
         }
     }

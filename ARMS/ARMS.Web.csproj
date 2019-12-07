@@ -190,6 +190,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIControllers\AttendaceApiController.cs" />
     <Compile Include="APIControllers\AuthController.cs" />
     <Compile Include="APIControllers\CourseAPIController.cs" />
     <Compile Include="APIControllers\LectureAPIController.cs" />
