@@ -21,7 +21,8 @@ namespace ARMS.Data.Models
         public int LectureID { get; set; }
         [Display(Name = "Check-in")]
         public bool CheckInEnabled { get; set; }
-        
+        public string CheckInBluetoothAddress { get; set; }
+
         [Required]
         public int CourseID { get; set; }
 

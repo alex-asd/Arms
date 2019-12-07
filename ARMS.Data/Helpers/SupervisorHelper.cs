@@ -61,15 +61,12 @@ namespace ARMS.Data.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    var participants = dc.Participants.Where(x => x.CourseID == courseId).ToList();
-
-                    List<User> users = new List<User>();
-                    foreach(var p in participants)
-                    {
-                        var user = dc.Users.FirstOrDefault(x => x.UserID == p.UserID);
-                        users.Add(user);
-                    }
+                    var users = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_ACTIVE).Select(ps => ps.User).ToList();
                     return users;
+
+                    //var user =  from p in dc.Participants
+                    //            where p.CourseID == courseId && p.ParticipantStatus == Participant.STATUS_ACTIVE
+                    //            select new UserParticipantVM() { };
                 }
             }
             catch (Exception ex)
@@ -86,14 +83,7 @@ namespace ARMS.Data.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    var supervisors = dc.Supervisors.Where(x => x.CourseID == courseId).ToList();
-
-                    List<User> users = new List<User>();
-                    foreach (var p in supervisors)
-                    {
-                        var user = dc.Users.FirstOrDefault(x => x.UserID == p.UserID);
-                        users.Add(user);
-                    }
+                    var users = dc.Supervisors.Where(ps => ps.CourseID == courseId).Select(ps => ps.User).ToList();
                     return users;
                 }
             }
@@ -122,16 +112,7 @@ namespace ARMS.Data.Helpers
             }
             return null;
         }
-
-        // returns whether there is a teacher with such email in the DB
-        //public static bool IsEmailRegistered(string email)
-        //{
-        //    using (var dc = new ArmsContext())
-        //    {
-        //        return !dc.Supervisors.Any(x => x.Email == email);
-        //    }
-        //}
-
+        
         // deletes a teacher with the targeted id
         public static void DeleteSupervisor(int userId, int courseId)
         {

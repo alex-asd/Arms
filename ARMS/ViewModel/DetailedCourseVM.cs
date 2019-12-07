@@ -19,7 +19,8 @@ namespace ARMS.ViewModel
         public string CourseDescription { get; set; }
         public User Creator { get; set; }
         public int CreatorID { get; set; }
-
+        
+        public List<int> AttendancePercentage { get; set; }
         public List<User> Participants { get; set; }
         public List<Lecture> Lectures { get; set; }
         public List<User> Supervisors { get; set; }

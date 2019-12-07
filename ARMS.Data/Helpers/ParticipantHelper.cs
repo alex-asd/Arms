@@ -32,19 +32,20 @@ namespace ARMS.Data.Helpers
         }
 
         // get participant attendance performance percentage
-        public static int GetParticipantAttendance(int userId, int courseId)
+        public static decimal GetParticipantAttendance(int userId, int courseId)
         {
+            decimal result = -1;
             try
             {
                 using (var dc = new ArmsContext())
                 {
                     // get number of lectures for the course
-                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId);
+                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId).ToList();
                     //int nol = lectures.Count();
 
                     // get number of attended lectures for the student
-                    int noa = 0;
-                    int nou = 0;
+                    decimal noa = 0m;
+                    decimal nou = 0m;
                     foreach(var lecture in lectures)
                     {
                         // check if student attended
@@ -53,15 +54,20 @@ namespace ARMS.Data.Helpers
                         else
                             nou++;
                     }
-                    int all = noa + nou;
-                    return (noa / all) * 100;
+                    // all represents the lectures that have already happened, not counting the scheduled ones for future classes
+                    decimal all = noa + nou;
+
+                    if (all == 0)
+                        return 0;
+                    
+                    result = (noa / all) * 100m;
                 }
             }
             catch (Exception ex)
             {
                 var msg = ex.Message;
             }
-            return -1;
+            return result;
         }
 
         // deletes a student with the targeted id
@@ -81,6 +87,24 @@ namespace ARMS.Data.Helpers
             {
                 var catchMsg = ex.Message;
             }
+        }
+
+        // get all participants for course
+        public static List<Participant> GetParticipantsForCourse(int courseId)
+        {
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    var list = dc.Participants.Where(x => x.CourseID == courseId).ToList();
+                    return list;
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+            }
+            return null;
         }
 
         // for testing purposes

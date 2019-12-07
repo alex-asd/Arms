@@ -48,12 +48,25 @@ namespace ARMS.Controllers
                 return HttpNotFound();
             }
 
+            //// gets all the participants' user data
+            //var users = SupervisorHelper.GetParticipantsForCourse(courseId);
+            //// gets the participant objects
+            //var participants = ParticipantHelper.GetParticipantsForCourse(courseId);
+
+            //List<UserParticipantVM> userParticipants = new List<UserParticipantVM>();
+            //for (int i = 0; i < users.Count; i++)
+            //{
+            //    userParticipants.Add(new UserParticipantVM(users[i], participants[i]));
+            //}
+
             var vm = new DetailedCourseVM(course)
             {
                 Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseId),
                 Lectures = SupervisorHelper.GetLecturesForCourse(courseId),
                 Participants = SupervisorHelper.GetParticipantsForCourse(courseId)
             };
+
+            ViewBag.CountOfPendingStudents = CourseHelper.GetCountOfPendingParticipants(courseId);
 
             return View(vm);
         }
@@ -112,12 +125,23 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
+            //var users = SupervisorHelper.GetParticipantsForCourse(courseId);
+            //var participants = ParticipantHelper.GetParticipantsForCourse(courseId);
+
+            //List<UserParticipantVM> userParticipants = new List<UserParticipantVM>();
+            //for (int i = 0; i < users.Count; i++)
+            //{
+            //    userParticipants.Add(new UserParticipantVM(users[i], participants[i]));
+            //}
+
             var vm = new DetailedCourseVM(course)
             {
                 Supervisors = supervisors,
                 Lectures = SupervisorHelper.GetLecturesForCourse(courseId),
                 Participants = SupervisorHelper.GetParticipantsForCourse(courseId)
             };
+
+            ViewBag.CountOfPendingStudents = CourseHelper.GetCountOfPendingParticipants(courseId);
 
             return View(vm);
         }

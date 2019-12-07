@@ -111,6 +111,10 @@
     <Compile Include="Migrations\201912061616053_ppk-fix.Designer.cs">
       <DependentUpon>201912061616053_ppk-fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912071623541_added-teacher-bt-address.cs" />
+    <Compile Include="Migrations\201912071623541_added-teacher-bt-address.Designer.cs">
+      <DependentUpon>201912071623541_added-teacher-bt-address.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Attendee.cs" />
     <Compile Include="Models\Course.cs" />
@@ -146,6 +150,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912061616053_ppk-fix.resx">
       <DependentUpon>201912061616053_ppk-fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912071623541_added-teacher-bt-address.resx">
+      <DependentUpon>201912071623541_added-teacher-bt-address.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -227,6 +227,7 @@
     <Compile Include="ViewModel\DetailedLectureVM.cs" />
     <Compile Include="ViewModel\LoginResponseVM.cs" />
     <Compile Include="ViewModel\LoginVM.cs" />
+    <Compile Include="ViewModel\UserParticipantVM.cs" />
     <Compile Include="ViewModel\RegistrationVM.cs" />
   </ItemGroup>
   <ItemGroup>

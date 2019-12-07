@@ -1,84 +1,90 @@
 ﻿@model ARMS.ViewModel.DetailedCourseVM
 @using ARMS.Helpers
+@using ARMS.Data.Helpers
 
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
+<h2>@Model.CourseName</h2>
 
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.CourseID)
+<div class="form-horizontal">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.CourseID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CourseName, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CourseName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CourseName, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CourseDescription, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CourseDescription, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CourseDescription, "", new { @class = "text-danger" })
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CourseDescription, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.CourseDescription, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.CourseDescription, "", new { @class = "text-danger" })
         </div>
+    </div>
 
-        <div class="form-group hidden">
-            @Html.HiddenFor(model => model.CreatorID)
-        </div>
-        <!--List of supervisors-->
-        <div class="form-group">
-            <h4>List of Supervisors</h4>
-            <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addSupervisorModal">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
-            </button>
-            <table class="custom-table">
+    <div class="form-group hidden">
+        @Html.HiddenFor(model => model.CreatorID)
+    </div>
+
+    @if (ViewBag.CountOfPendingStudents <= 0)
+    {
+        <h4>No new students have enrolled for this course.</h4>
+    }
+
+    <!--List of supervisors-->
+    <div class="form-group">
+        <h4>List of Supervisors</h4>
+        <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addSupervisorModal">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+        </button>
+        <table class="custom-table">
+            <tr>
+                <th>
+                    Supervisor's Name
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>Remove</th>
+            </tr>
+
+            @foreach (var item in Model.Supervisors)
+            {
                 <tr>
-                    <th>
-                        Supervisor's Name
-                    </th>
-                    <th>
-                        Email
-                    </th>
-                    <th>Remove</th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        <a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/API/Util/DeleteSupervisor">
+                            <span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span>
+                        </a>
+                    </td>
                 </tr>
+            }
+        </table>
+    </div>
 
-                @foreach (var item in Model.Supervisors)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.FirstName)
-                            @Html.DisplayFor(modelItem => item.LastName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Email)
-                        </td>
-                        <td>
-                            <a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/API/Util/DeleteSupervisor">
-                                <span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span>
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </table>
-        </div>
-
-        <!--List of students-->
+    <!--List of pending students-->
+    @if (ViewBag.CountOfPendingStudents > 0)
+    {
         <div class="form-group">
-            <h4>List of Students</h4>
-            <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addParticipantModal">
-                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
-            </button>
+            <h4>List of Pending Students</h4>
             <table class="custom-table">
                 <tr>
                     <th>
@@ -88,9 +94,11 @@
                         Email
                     </th>
                     <th>
-                        Attendance
+                        Approve
                     </th>
-                    <th>Remove</th>
+                    <th>
+                        Discard
+                    </th>
                 </tr>
 
                 @foreach (var item in Model.Participants)
@@ -104,50 +112,93 @@
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
                         <td>
-                            insert performance here
+                            tick
                         </td>
                         <td>
-                            <a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/Api/Util/DeleteParticipant"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
+                            remove
+                            @*<a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/Api/Util/DeleteParticipant"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>*@
                         </td>
                     </tr>
                 }
             </table>
         </div>
+    }
 
-        <!--List of lectures-->
-        <div class="form-group">
-            <h4>Scheduled Lectures</h4>
-            @Html.ActionLink("Edit Lectures", "Index", "Lectures", new { courseId = Model.CourseID }, new { @class = "btn btn-default" })
-            <table class="custom-table">
+    <!--List of students-->
+    <div class="form-group">
+        <h4>List of Students</h4>
+        <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addParticipantModal">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+        </button>
+        <table class="custom-table">
+            <tr>
+                <th>
+                    Student Name
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Attendance
+                </th>
+                <th>Remove</th>
+            </tr>
+
+            @foreach (var item in Model.Participants)
+            {
                 <tr>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Remove</th>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @ParticipantHelper.GetParticipantAttendance(item.UserID, Model.CourseID)%
+                    </td>
+                    <td>
+                        <a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/Api/Util/DeleteParticipant"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
+                    </td>
                 </tr>
+            }
+        </table>
+    </div>
 
-                @foreach (var item in Model.Lectures)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.From)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.To)
-                        </td>
-                        <td>
-                            <a class="async-delete" data-type="lecture" data-lecture-id="@item.LectureID" href="/Api/Util/DeleteLecture"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
-                        </td>
-                    </tr>
-                }
-            </table>
-        </div>
+    <!--List of lectures-->
+    <div class="form-group">
+        <h4>Scheduled Lectures</h4>
+        @Html.ActionLink("Edit Lectures", "Index", "Lectures", new { courseId = Model.CourseID }, new { @class = "btn btn-default" })
+        <table class="custom-table">
+            <tr>
+                <th>From</th>
+                <th>To</th>
+                <th>Remove</th>
+            </tr>
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+            @foreach (var item in Model.Lectures)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.From)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.To)
+                    </td>
+                    <td>
+                        <a class="async-delete" data-type="lecture" data-lecture-id="@item.LectureID" href="/Api/Util/DeleteLecture"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
         </div>
     </div>
+</div>
 }
 
 <div>

@@ -8,7 +8,7 @@
     var list = SupervisorHelper.GetParticipantsForCourse(Model.CourseID);
 }
 
-<h2>Details</h2>
+<h2>@Model.CourseName</h2>
 
 <div>
     <h4>Course</h4>
@@ -49,6 +49,10 @@
 
     @if (CurrentWebContext.CurrentUser.Type == "teacher")
     {
+        <span>This course has: <u>@ViewBag.CountOfPendingStudents pending students</u></span><br />
+        <span>Go to edit page to approve/remove.</span>
+
+        <br />
         <h4>List of Supervisors</h4>
         <table class="custom-table">
             <tr>
@@ -99,7 +103,7 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        insert performance here
+                        @ParticipantHelper.GetParticipantAttendance(item.UserID, Model.CourseID)%
                     </td>
                 </tr>
             }
@@ -126,7 +130,7 @@
         </table>
     }
 
-</div>
+</div><br />
 <p>
     @if (CurrentWebContext.CurrentUser.Type == "teacher")
     {
