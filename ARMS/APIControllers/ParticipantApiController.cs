@@ -26,5 +26,66 @@ namespace ARMS.APIControllers
                 return Ok(results.ToList());
             }
         }
+
+        [HttpGet]
+        [Authorize]
+        [Route("is-participant")]
+        public IHttpActionResult GetById(int course_id, int user_id)
+        {
+            using (var dc = new ArmsContext())
+            {
+                dc.Configuration.LazyLoadingEnabled = false;
+                var results = dc.Participants.Count(x => x.CourseID == course_id && x.UserID == user_id);
+                if (results == 1)
+                {
+                    return Ok();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("apply")]
+        public IHttpActionResult ApplyParticipant(int course_id, int user_id)
+        {
+            using (var dc = new ArmsContext())
+            {
+                Participant part = new Participant(user_id, course_id, "pending");
+                part.Insert();
+                return Ok();
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("accept")]
+        public IHttpActionResult AcceptParticipant([FromBody] Participant participant)
+        {
+            using (var dc = new ArmsContext())
+            {
+                var db_part = dc.Participants.FirstOrDefault(x => x.ParticipantID == participant.ParticipantID);
+                db_part.ParticipantStatus = "active";
+                dc.SaveChanges();
+                return Ok();
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("decline")]
+        public IHttpActionResult DeclineParticipant([FromBody] Participant participant)
+        {
+            using (var dc = new ArmsContext())
+            {
+                var db_part = dc.Participants.FirstOrDefault(x => x.ParticipantID == participant.ParticipantID);
+                db_part.ParticipantStatus = "active";
+                db_part.Delete();
+                return Ok();
+            }
+        }
     }
 }

@@ -34,14 +34,16 @@ namespace ARMS.APIControllers
                 dc.Configuration.LazyLoadingEnabled = false;
                 if (curr_user.Type == "student")
                 {
-                    var participations = dc.Participants.Include(x => x.Course).Include(x => x.User)
+                    var participations = dc.Participants.Include(x => x.Course).Include(x => x.Course.Creator)
+                        .Include(x => x.User)
                         .Where(x => x.UserID == curr_user.UserID);
                     return Ok(participations.ToList());
                 }
 
                 if (curr_user.Type == "teacher")
                 {
-                    var supervisions = dc.Supervisors.Include(x => x.Course).Include(x => x.User)
+                    var supervisions = dc.Supervisors.Include(x => x.Course).Include(x => x.Course.Creator)
+                        .Include(x => x.User)
                         .Where(x => x.UserID == curr_user.UserID);
                     return Ok(supervisions.ToList());
                 }
