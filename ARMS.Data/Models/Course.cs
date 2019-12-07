@@ -42,7 +42,7 @@ namespace ARMS.Data.Models
             {
                 using (var dc = new ArmsContext())
                 {
-                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseName == this.CourseName.ToLower());
+                    var sqlEntry = dc.Courses.FirstOrDefault(x => x.CourseID == this.CourseID);
 
                     // Insert the new course to the DB
                     if (sqlEntry == null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Insert))

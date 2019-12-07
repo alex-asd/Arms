@@ -69,7 +69,7 @@ namespace ARMS.APIControllers
             {
                 var db_part = dc.Participants.FirstOrDefault(x => x.ParticipantID == participant.ParticipantID);
                 db_part.ParticipantStatus = "active";
-                dc.SaveChanges();
+                db_part.Update();
                 return Ok();
             }
         }
