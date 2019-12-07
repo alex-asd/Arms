@@ -112,11 +112,10 @@
                             @Html.DisplayFor(modelItem => item.Email)
                         </td>
                         <td>
-                            tick
+                            <a class="async-add" data-type="pending" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/API/Util/ApproveParticipant">Add</a>
                         </td>
                         <td>
-                            remove
-                            @*<a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/Api/Util/DeleteParticipant"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>*@
+                            <a class="async-delete" data-type="user" data-user-id="@item.UserID" data-course-id="@Model.CourseID" href="/Api/Util/DeleteParticipant"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
                         </td>
                     </tr>
                 }

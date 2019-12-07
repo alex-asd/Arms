@@ -135,6 +135,10 @@ $('.async-add').click(function (e) {
             var email = modal.find('input[name="inputParticipantEmail"]').val();
             url = '{0}?courseId={1}&email={2}'.format(href, encodeURIComponent(courseId), encodeURIComponent(email));
             break;
+        case 'pending':
+            var userId = that.data('user-id');
+            url = '{0}?userId={1}&courseId={2}'.format(href, encodeURIComponent(userId), encodeURIComponent(courseId));
+
         default:
     }
 

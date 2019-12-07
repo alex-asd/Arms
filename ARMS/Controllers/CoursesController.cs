@@ -48,6 +48,7 @@ namespace ARMS.Controllers
                 return HttpNotFound();
             }
 
+            // Alternate method
             //// gets all the participants' user data
             //var users = SupervisorHelper.GetParticipantsForCourse(courseId);
             //// gets the participant objects
@@ -125,6 +126,8 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
+
+            // Alternate method
             //var users = SupervisorHelper.GetParticipantsForCourse(courseId);
             //var participants = ParticipantHelper.GetParticipantsForCourse(courseId);
 

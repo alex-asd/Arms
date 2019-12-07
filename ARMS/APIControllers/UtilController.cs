@@ -43,6 +43,17 @@ namespace ARMS.APIControllers
         }
 
         [HttpGet]
+        [Route("API/Util/ApproveParticipant")]
+        public void ApproveParticipant(int userId, int courseId)
+        {
+            var participant = ParticipantHelper.GetById(userId);
+            if (participant == null)
+                return;
+            participant.ParticipantStatus = Participant.STATUS_ACTIVE;
+            participant.Update();
+        }
+
+        [HttpGet]
         [Route("API/Util/DeleteParticipant")]
         public void DeleteParticipant(int userId, int courseId)
         {
