@@ -112,45 +112,6 @@ namespace ARMS.Data.Helpers
             return null;
         }
 
-        // get pending participants for course
-        public static List<User> GetPendingParticipantsForCourse(int courseId)
-        {
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var list = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_PENDING).Select(ps => ps.User).ToList();
-
-                    return list.ToList();
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return null;
-        }
-
-        // get the number of pending participants for course
-        public static int GetCountOfPendingParticipants(int courseId)
-        {
-            int num = 0;
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    num = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_PENDING).Select(ps => ps.User).Count();
-
-                    return num;
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return num;
-        }
-
         // get courses for current teacher logged in
         public static List<Course> GetCoursesForSupervisor(int userId)
         {

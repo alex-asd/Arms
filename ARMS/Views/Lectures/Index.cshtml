@@ -8,7 +8,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", new { courseId = ViewBag.CourseID })
 </p>
 <table class="table">
     <tr>
@@ -42,11 +42,15 @@
             @Html.DisplayFor(modelItem => item.CheckInEnabled)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.LectureID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.LectureID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.LectureID })
+            @Html.ActionLink("Edit", "Edit", new { courseId = item.CourseID, lectureId = item.LectureID }) |
+            @Html.ActionLink("Details", "Details", new { courseId = item.CourseID, lectureId = item.LectureID }) |
+            @Html.ActionLink("Delete", "Delete", new { courseId = item.CourseID, lectureId = item.LectureID })
         </td>
     </tr>
 }
 
 </table>
+
+<p>
+    @Html.ActionLink("Back to Course Edit", "Edit", "Courses", new { courseId = ViewBag.CourseID }, null)
+</p>

@@ -134,7 +134,7 @@
 <p>
     @if (CurrentWebContext.CurrentUser.Type == "teacher")
     {
-        @Html.ActionLink("Edit", "Edit", new { id = Model.CourseID }) 
+        @Html.ActionLink("Edit", "Edit", new { courseId = Model.CourseID }) 
         <span>|</span>
     }
     @Html.ActionLink("Back to List", "Index", new { userId = CurrentWebContext.CurrentUser.UserID })

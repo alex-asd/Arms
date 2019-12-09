@@ -62,20 +62,20 @@ namespace ARMS.APIControllers
 
         [HttpGet]
         [Route("API/Util/AddAttendee")]
-        public void AddAttendee(int courseId, string email)
+        public void AddAttendee(int lectureId, string email)
         {
             var user = UserHelper.GetByEmail(email);
             if (user == null)
                 return;
-            var attendee = new Attendee(user.UserID, courseId, "");
+            var attendee = new Attendee(user.UserID, lectureId, "");
             attendee.Insert();
         }
 
         [HttpGet]
         [Route("API/Util/DeleteAttendee")]
-        public void DeleteAttendee(int userId)
+        public void DeleteAttendee(int lectureId, int userId)
         {
-            AttendeeHelper.DeleteAttendee(userId);
+            AttendeeHelper.DeleteAttendee(lectureId, userId);
         }
 
         [HttpGet]

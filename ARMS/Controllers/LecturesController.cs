@@ -14,34 +14,43 @@ namespace ARMS.Controllers
 {
     public class LecturesController : Controller
     {
-        private ArmsContext db = new ArmsContext();
-
         // GET: Lectures
         public ActionResult Index(int courseId)
         {
             var lectures = LectureHelper.GetLecturesForCourse(courseId);
+
+            ViewBag.CourseID = courseId;
+
             return View(lectures);
         }
 
         // GET: Lectures/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int courseId, int? lectureId)
         {
-            if (id == null)
+            if (lectureId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lecture lecture = db.Lectures.Find(id);
+
+            // cast the nullable obj to int
+            int id = (int)lectureId;
+
+            Lecture lecture = LectureHelper.GetById(id);
+
             if (lecture == null)
             {
                 return HttpNotFound();
             }
+
+            ViewBag.Attendees = AttendeeHelper.GetAttendeesForLecture(id);
+
             return View(lecture);
         }
 
         // GET: Lectures/Create
-        public ActionResult Create()
+        public ActionResult Create(int courseId)
         {
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName");
+            ViewBag.CourseID = courseId;
             return View();
         }
 
@@ -54,28 +63,30 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Lectures.Add(lecture);
-                db.SaveChanges();
-                return RedirectToAction("Index", lecture.CourseID);
+                lecture.Insert();
+                return RedirectToAction("Index", new { courseId = lecture.CourseID });
             }
 
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", lecture.CourseID);
             return View(lecture);
         }
 
         // GET: Lectures/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int courseId, int? lectureId)
         {
-            if (id == null)
+            if (lectureId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lecture lecture = db.Lectures.Find(id);
+
+            Lecture lecture = LectureHelper.GetById((int)lectureId);
+
             if (lecture == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", lecture.CourseID);
+
+            ViewBag.Attendees = AttendeeHelper.GetAttendeesForLecture((int)lectureId);
+
             return View(lecture);
         }
 
@@ -88,42 +99,39 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(lecture).State = EntityState.Modified;
-                db.SaveChanges();
+                lecture.Insert();
                 return RedirectToAction("Index", lecture.CourseID);
             }
-            ViewBag.CourseID = new SelectList(db.Courses, "CourseID", "CourseName", lecture.CourseID);
+
+            ViewBag.Attendees = AttendeeHelper.GetAttendeesForLecture(lecture.LectureID);
+
             return View(lecture);
         }
 
         // GET: Lectures/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? lectureId)
         {
-            if (id == null)
+            if (lectureId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lecture lecture = db.Lectures.Find(id);
+
+            Lecture lecture = LectureHelper.GetById((int)lectureId);
+
             if (lecture == null)
             {
                 return HttpNotFound();
             }
-            return View(lecture);
-        }
 
-        // POST: Lectures/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Lecture lecture = db.Lectures.Find(id);
-            db.Lectures.Remove(lecture);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            lecture.Delete();
+
+            return RedirectToAction("Index", lecture.CourseID);
         }
 
         protected override void Dispose(bool disposing)
         {
+            ArmsContext db = new ArmsContext();
+
             if (disposing)
             {
                 db.Dispose();

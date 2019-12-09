@@ -1,8 +1,10 @@
 ﻿@model ARMS.Data.Models.Lecture
+@using ARMS.Data.Models
 
 @{
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ICollection<User> list = ViewBag.Attendees;
 }
 
 <h2>Edit</h2>
@@ -11,57 +13,103 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Lecture</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(model => model.LectureID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
-            </div>
-        </div>
+<div class="form-horizontal">
+    <h4>Lecture</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.LectureID)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.To, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CheckInEnabled, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.CheckInEnabled)
-                    @Html.ValidationMessageFor(model => model.CheckInEnabled, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CourseID, "CourseID", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownList("CourseID", null, htmlAttributes: new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.CourseID, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.From, "", new { @class = "text-danger" })
         </div>
     </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.To, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(model => model.CheckInEnabled)
+    </div>
+
+    <div class="form-group">
+        @Html.HiddenFor(model => model.CourseID)
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+
+    @if (Model.To < DateTime.Now)
+    {
+        <h4>Edit list of students that have attended the lecture:</h4>
+        <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addAttendeeModal">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add an Attendee Manually
+        </button>
+        <table class="custom-table">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Email
+                </th>
+                <th>
+                    Remove
+                </th>
+            </tr>
+
+            @foreach (var item in list)
+            {
+                <tr>
+                    <td>
+                        @item.FirstName
+                        @item.LastName
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                    <td>
+                        <a class="async-delete" data-type="attendee" data-user-id="@item.UserID" data-lecture-id="@Model.LectureID" href="/Api/Util/DeleteAttendee"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "Index", new { courseId = Model.CourseID })
+</div>
+
+<!-- Add Attendee Modal -->
+<div class="modal fade" id="addAttendeeModal" tabindex="-1" role="dialog" aria-labelledby="addAttendeeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="addAttendeeModalLabel">Add Participant</h4>
+            </div>
+            <div class="modal-body">
+                <label for="inputAttMail">Enter email:</label>
+                <input name="inputAttendeeEmail" type="text" id="inputAttMail" class="form-control" placeholder="someone@mail.com" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <a class="btn btn-primary async-add" data-type="attendee" data-lecture-id="@Model.LectureID" href="/API/Util/AddAttendee">Add</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {

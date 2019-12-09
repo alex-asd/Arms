@@ -1,11 +1,13 @@
 ﻿@model ARMS.Data.Models.Lecture
+@using ARMS.Data.Models
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    ICollection<User> list = ViewBag.Attendees;
 }
 
-<h2>Details</h2>
+<h2>@Model.Course.CourseName</h2>
 
 <div>
     <h4>Lecture</h4>
@@ -44,8 +46,38 @@
         </dd>
 
     </dl>
+
+    <br />
+    @if (Model.To < DateTime.Now)
+    {
+        <h4>List of students that have attended the lecture:</h4>
+        <table class="custom-table">
+            <tr>
+                <th>
+                    Name
+                </th>
+                <th>
+                    Email
+                </th>
+            </tr>
+
+            @foreach(var item in list)
+            { 
+                <tr>
+                    <td>
+                        @item.FirstName 
+                        @item.LastName
+                    </td>
+                    <td>
+                        @item.Email
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.LectureID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Edit", "Edit", new { courseId = Model.CourseID, lectureId = Model.LectureID }) |
+    @Html.ActionLink("Back to List", "Index", new { courseId = Model.CourseID })
 </p>

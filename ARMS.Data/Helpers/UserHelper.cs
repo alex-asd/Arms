@@ -13,20 +13,21 @@ namespace ARMS.Data.Helpers
 {
     public static class UserHelper
     {
-        // get User by id
+        // get user by id
         public static User GetById(int userId)
         {
             var model = Get(userId);
             return model;
         }
       
+        // get user by email
         public static User GetByEmail(string email)
         {
             var model = Get(0, email);
             return model;
         }
 
-        // get the actual User object
+        // get the actual user object
         private static User Get(int userId = 0, string email = null)
         {
             User model = null;
@@ -71,14 +72,14 @@ namespace ARMS.Data.Helpers
             return isReg;
         }
 
-        // deletes a User with the targeted username
-        public static void DeleteUser(string email)
+        // deletes a user with the specified userId
+        public static void DeleteUser(int userId)
         {
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var User = dc.Users.Where(u => u.Email == email).FirstOrDefault();
+                    var User = dc.Users.Where(u => u.UserID == userId).FirstOrDefault();
                     dc.Users.Remove(User);
 
                     dc.SaveChanges();
@@ -88,6 +89,42 @@ namespace ARMS.Data.Helpers
             {
                 var catchMsg = ex.Message;
             }
+        }
+
+        // get all students (users) for the specified course
+        public static List<User> GetParticipantsForCourse(int courseId)
+        {
+            var users = new List<User>();
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    users = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_ACTIVE).Select(ps => ps.User).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return users;
+        }
+
+        // get students (users) pending for a specified course
+        public static List<User> GetPendingParticipantsForCourse(int courseId)
+        {
+            var list = new List<User>();
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    list = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_PENDING).Select(ps => ps.User).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return list;
         }
 
         // for testing purposes

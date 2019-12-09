@@ -16,8 +16,6 @@ namespace ARMS.Controllers
 {
     public class CoursesController : Controller
     {
-        private ArmsContext db = new ArmsContext();
-
         // GET: Courses
         public ActionResult Index(int userId)
         {
@@ -33,49 +31,37 @@ namespace ARMS.Controllers
         }
 
         // GET: Courses/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? courseId)
         {
-            if (id == null)
+            if (courseId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            int courseId = (int)id;
+            int courseID = (int)courseId;
 
-            Course course = CourseHelper.GetById(courseId);
+            Course course = CourseHelper.GetById(courseID);
             if (course == null)
             {
                 return HttpNotFound();
             }
 
-            // Alternate method
-            //// gets all the participants' user data
-            //var users = SupervisorHelper.GetParticipantsForCourse(courseId);
-            //// gets the participant objects
-            //var participants = ParticipantHelper.GetParticipantsForCourse(courseId);
-
-            //List<UserParticipantVM> userParticipants = new List<UserParticipantVM>();
-            //for (int i = 0; i < users.Count; i++)
-            //{
-            //    userParticipants.Add(new UserParticipantVM(users[i], participants[i]));
-            //}
-
             var vm = new DetailedCourseVM(course)
             {
-                Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseId),
-                Lectures = SupervisorHelper.GetLecturesForCourse(courseId),
-                Participants = SupervisorHelper.GetParticipantsForCourse(courseId)
+                Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID),
+                Lectures = LectureHelper.GetLecturesForCourse(courseID),
+                Participants = UserHelper.GetParticipantsForCourse(courseID)
             };
 
-            ViewBag.CountOfPendingStudents = CourseHelper.GetCountOfPendingParticipants(courseId);
+            ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
 
             return View(vm);
         }
 
         // GET: Courses/Create
-        public ActionResult Create()
+        public ActionResult Create(int userId)
         {
-            ViewBag.CreatorID = new SelectList(db.Users, "UserID", "LastName");
+            ViewBag.UserID = userId;
             return View();
         }
 
@@ -88,37 +74,34 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Courses.Add(course);
-                db.SaveChanges();
+                course.Insert();
 
                 var model = new Supervisor(CurrentWebContext.CurrentUser.UserID, course.CourseID);
                 model.Insert();
 
                 return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
             }
-
-            ViewBag.CreatorID = new SelectList(db.Users, "UserID", "LastName", course.CreatorID);
             return View(course);
         }
 
         // GET: Courses/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? courseId)
         {
-            if (id == null)
+            if (courseId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            int courseId = (int)id;
+            int courseID = (int)courseId;
 
-            Course course = CourseHelper.GetById(courseId);
+            Course course = CourseHelper.GetById(courseID);
             if (course == null)
             {
                 return HttpNotFound();
             }
 
             // check if the user trying to access the course is a supervisor
-            var supervisors = SupervisorHelper.GetSupervisorsForCourse(courseId);
+            var supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID);
 
             // if he isn't, then return him => denied
             if(!supervisors.Any(x => x.UserID == CurrentWebContext.CurrentUser.UserID))
@@ -126,25 +109,14 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
-
-            // Alternate method
-            //var users = SupervisorHelper.GetParticipantsForCourse(courseId);
-            //var participants = ParticipantHelper.GetParticipantsForCourse(courseId);
-
-            //List<UserParticipantVM> userParticipants = new List<UserParticipantVM>();
-            //for (int i = 0; i < users.Count; i++)
-            //{
-            //    userParticipants.Add(new UserParticipantVM(users[i], participants[i]));
-            //}
-
             var vm = new DetailedCourseVM(course)
             {
                 Supervisors = supervisors,
-                Lectures = SupervisorHelper.GetLecturesForCourse(courseId),
-                Participants = SupervisorHelper.GetParticipantsForCourse(courseId)
+                Lectures = LectureHelper.GetLecturesForCourse(courseID),
+                Participants = UserHelper.GetParticipantsForCourse(courseID)
             };
 
-            ViewBag.CountOfPendingStudents = CourseHelper.GetCountOfPendingParticipants(courseId);
+            ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
 
             return View(vm);
         }
@@ -166,33 +138,25 @@ namespace ARMS.Controllers
         }
 
         // GET: Courses/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? courseId)
         {
-            if (id == null)
+            if (courseId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            Course course = CourseHelper.GetById((int)courseId);
             if (course == null)
             {
                 return HttpNotFound();
             }
-            return View(course);
-        }
 
-        // POST: Courses/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Course course = db.Courses.Find(id);
-            db.Courses.Remove(course);
-            db.SaveChanges();
             return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
         }
-
+        
         protected override void Dispose(bool disposing)
         {
+            ArmsContext db = new ArmsContext();
+
             if (disposing)
             {
                 db.Dispose();

@@ -74,25 +74,25 @@ $('.async-delete').click(function (e) {
     var that = $(this);
 
     var href = that.prop('href');
-    console.log(href);
 
     var type = that.data('type');
+
+    var url;
 
     switch (type) {
         case 'user':
             var userId = that.data('user-id');
             var courseId = that.data('course-id');
-
-            var url = '{0}?userId={1}&courseId={2}'.format(href, encodeURIComponent(userId), encodeURIComponent(courseId));
+            url = '{0}?userId={1}&courseId={2}'.format(href, encodeURIComponent(userId), encodeURIComponent(courseId));
             break;
         case 'lecture':
-
             var lectureId = that.data('lecture-id');
-            console.log(userId);
-
-            var url = '{0}?lectureId={1}'.format(href, encodeURIComponent(lectureId));
-            console.log(url);
-
+            url = '{0}?lectureId={1}'.format(href, encodeURIComponent(lectureId));
+            break;
+        case 'attendee':
+            var userId = that.data('user-id');
+            var lectureId = that.data('lecture-id');
+            url = '{0}?lectureId={1}&userId={2}'.format(href, encodeURIComponent(lectureId), encodeURIComponent(userId));
             break;
         default:
     }
@@ -104,24 +104,22 @@ $('.async-delete').click(function (e) {
         });
 });
 
-$('#addSupervisorModal, #addParticipantModal, #addLectureModal').on('hidden.bs.modal', function () {
+$('#addSupervisorModal, #addParticipantModal, #addLectureModal, #addAttendeeModal').on('hidden.bs.modal', function () {
     // Remove the content from the modal once the user closes it
     $('.result-body').html('');
 });
 
 $('.async-add').click(function (e) {
     e.preventDefault();
-    console.log('async call clicked');
 
     var that = $(this);
 
     var href = that.prop('href');
-    console.log('href = ' + href);
+
     var courseId = that.data('course-id');
-    console.log('courseId = ' + courseId);
 
     var type = that.data('type');
-    console.log('type = ' + type)
+
     var url;
 
     var modal = that.parent().parent();
@@ -129,11 +127,16 @@ $('.async-add').click(function (e) {
     switch (type) {
         case 'supervisor':
             var email = modal.find('input[name="inputSupervisorEmail"]').val();
-            url = '{0}?courseId={1}&email={2}'.format(href, encodeURIComponent(courseId), email);
+            url = '{0}?courseId={1}&email={2}'.format(href, encodeURIComponent(courseId), encodeURIComponent(email));
             break;
         case 'participant':
             var email = modal.find('input[name="inputParticipantEmail"]').val();
             url = '{0}?courseId={1}&email={2}'.format(href, encodeURIComponent(courseId), encodeURIComponent(email));
+            break;
+        case 'attendee':
+            var email = modal.find('input[name="inputAttendeeEmail"]').val();
+            var lectureId = that.data('lecture-id');
+            url = '{0}?lectureId={1}&email={2}'.format(href, encodeURIComponent(lectureId), encodeURIComponent(email));
             break;
         case 'pending':
             var userId = that.data('user-id');

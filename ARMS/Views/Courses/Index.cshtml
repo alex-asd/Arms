@@ -23,7 +23,7 @@
 <h2>The courses that you manage:</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", new { userId = CurrentWebContext.CurrentUser.UserID })
 </p>
 }
 
@@ -58,16 +58,16 @@
         @if (CurrentWebContext.CurrentUser.Type == "teacher")
         {
             <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.CourseID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.CourseID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.CourseID })
+                @Html.ActionLink("Edit", "Edit", new { courseId = item.CourseID }) |
+                @Html.ActionLink("Details", "Details", new { courseId = item.CourseID }) |
+                @Html.ActionLink("Delete", "Delete", new { courseId = item.CourseID })
             </td>
         }
 
         @if (CurrentWebContext.CurrentUser.Type == "student")
         {
             <td>
-                @Html.ActionLink("Details", "Details", new { id = item.CourseID })
+                @Html.ActionLink("Details", "Details", new { courseId = item.CourseID })
             </td>
         }
     </tr>

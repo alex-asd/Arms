@@ -225,7 +225,6 @@
     <Compile Include="Startup.cs" />
     <Compile Include="Handlers\TokenValidationHandler.cs" />
     <Compile Include="ViewModel\DetailedCourseVM.cs" />
-    <Compile Include="ViewModel\DetailedLectureVM.cs" />
     <Compile Include="ViewModel\LoginResponseVM.cs" />
     <Compile Include="ViewModel\LoginVM.cs" />
     <Compile Include="ViewModel\UserParticipantVM.cs" />

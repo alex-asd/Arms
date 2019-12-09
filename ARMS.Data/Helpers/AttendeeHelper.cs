@@ -32,13 +32,13 @@ namespace ARMS.Data.Helpers
         }
 
         // deletes a attendee with the targeted id
-        public static void DeleteAttendee(int userId)
+        public static void DeleteAttendee(int lectureId, int userId)
         {
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var att = dc.Attendees.Where(u => u.UserID == userId).FirstOrDefault();
+                    var att = dc.Attendees.Where(u => u.UserID == userId && u.LectureID == lectureId).FirstOrDefault();
                     dc.Attendees.Remove(att);
 
                     dc.SaveChanges();
@@ -50,8 +50,28 @@ namespace ARMS.Data.Helpers
             }
         }
 
+        //get all attendees (users) for the lecture
+        public static List<User> GetAttendeesForLecture(int lectureId)
+        {
+            var list = new List<User>();
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    list = dc.Attendees.Where(a => a.LectureID == lectureId).Select(a => a.User).ToList();
+
+                    return list.ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return list;
+        }
+
         // for testing purposes
-        public static List<Attendee> GetAllLectures()
+        public static List<Attendee> GetAllAttendees()
         {
             using (var dc = new ArmsContext())
             {

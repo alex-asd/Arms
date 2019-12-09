@@ -54,28 +54,6 @@ namespace ARMS.Data.Helpers
             return model;
         }
 
-        // get all participants (users) for the specified course
-        public static List<User> GetParticipantsForCourse(int courseId)
-        {
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var users = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_ACTIVE).Select(ps => ps.User).ToList();
-                    return users;
-
-                    //var user =  from p in dc.Participants
-                    //            where p.CourseID == courseId && p.ParticipantStatus == Participant.STATUS_ACTIVE
-                    //            select new UserParticipantVM() { };
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return null;
-        }
-
         // get all supervisors (users) for the specified course
         public static List<User> GetSupervisorsForCourse(int courseId)
         {
@@ -85,25 +63,6 @@ namespace ARMS.Data.Helpers
                 {
                     var users = dc.Supervisors.Where(ps => ps.CourseID == courseId).Select(ps => ps.User).ToList();
                     return users;
-                }
-            }
-            catch (Exception ex)
-            {
-                var catchMsg = ex.Message;
-            }
-            return null;
-        }
-
-        // get all lectures for the specified course
-        public static List<Lecture> GetLecturesForCourse(int courseId)
-        {
-            try
-            {
-                using (var dc = new ArmsContext())
-                {
-                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId).ToList();
-                    
-                    return lectures;
                 }
             }
             catch (Exception ex)

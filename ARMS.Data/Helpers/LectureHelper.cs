@@ -63,20 +63,21 @@ namespace ARMS.Data.Helpers
         // get lectures for a course
         public static List<Lecture> GetLecturesForCourse(int courseId)
         {
+            var list = new List<Lecture>();
+
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var list = dc.Lectures.Where(l => l.CourseID == courseId).Include(x => x.Course).ToList();
-
-                    return list.ToList();
+                    list = dc.Lectures.Where(l => l.CourseID == courseId).Include(x => x.Course).ToList();
                 }
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
-            return null;
+
+            return list;
         }
     }
 }

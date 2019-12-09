@@ -39,28 +39,24 @@ namespace ARMS.Data.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    // get number of lectures for the course
-                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId).ToList();
-                    //int nol = lectures.Count();
+                    // get number of lectures for the course that have happened
+                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId && x.To <= DateTime.Now).ToList();
+                    decimal numOfLectures = lectures.Count();
 
                     // get number of attended lectures for the student
                     decimal noa = 0m;
-                    decimal nou = 0m;
+
                     foreach(var lecture in lectures)
                     {
                         // check if student attended
                         if(dc.Attendees.Any(x => x.LectureID == lecture.LectureID && x.UserID == userId))
                             noa++;
-                        else
-                            nou++;
                     }
-                    // all represents the lectures that have already happened, not counting the scheduled ones for future classes
-                    decimal all = noa + nou;
 
-                    if (all == 0)
+                    if (numOfLectures == 0)
                         return 0;
                     
-                    result = (noa / all) * 100m;
+                    result = (noa / numOfLectures) * 100m;
                 }
             }
             catch (Exception ex)
@@ -105,6 +101,26 @@ namespace ARMS.Data.Helpers
                 var msg = ex.Message;
             }
             return null;
+        }
+
+        // get the number of pending participants for course
+        public static int GetCountOfPendingParticipants(int courseId)
+        {
+            int num = 0;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    num = dc.Participants.Where(ps => ps.CourseID == courseId && ps.ParticipantStatus == Participant.STATUS_PENDING).Select(ps => ps.User).Count();
+
+                    return num;
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return num;
         }
 
         // for testing purposes
