@@ -11,6 +11,9 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using ARMS.Models;
+using System.Configuration;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace ARMS
 {
@@ -18,7 +21,20 @@ namespace ARMS
     {
         public Task SendAsync(IdentityMessage message)
         {
-            // Plug in your email service here to send an email.
+            return ConfigSendGridAsync(message);
+        }
+
+        private Task ConfigSendGridAsync(IdentityMessage message)
+        {
+            var apiKey = ConfigurationManager.AppSettings["SendGrid_Key"];
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("ArmsSystemMail@mail.bg", "ARMS System");
+            var subject = message.Subject;
+            var to = new EmailAddress(message.Destination);
+            var plainTextContent = message.Body;
+            var htmlContent = message.Body;
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = client.SendEmailAsync(msg);
             return Task.FromResult(0);
         }
     }
