@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using ARMS.Data;
 using ARMS.Helpers;
+using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
 {
@@ -38,7 +39,7 @@ namespace ARMS.APIControllers
                 var results = dc.Participants.Count(x => x.CourseID == course_id && x.UserID == user_id);
                 if (results == 1)
                 {
-                    return Ok();
+                    return Ok(new ApiCallbackMessage("Success", true));
                 }
                 else
                 {
@@ -54,9 +55,10 @@ namespace ARMS.APIControllers
         {
             using (var dc = new ArmsContext())
             {
+                //TODO: Add check if exists
                 Participant part = new Participant(user_id, course_id, "pending");
                 part.Insert();
-                return Ok();
+                return Ok(new ApiCallbackMessage("Success", true));
             }
         }
 
@@ -67,10 +69,11 @@ namespace ARMS.APIControllers
         {
             using (var dc = new ArmsContext())
             {
+                //todo: add check if exists
                 var db_part = dc.Participants.FirstOrDefault(x => x.ParticipantID == participant.ParticipantID);
                 db_part.ParticipantStatus = "active";
                 db_part.Update();
-                return Ok();
+                return Ok(new ApiCallbackMessage("Success", true));
             }
         }
 
@@ -84,7 +87,7 @@ namespace ARMS.APIControllers
                 var db_part = dc.Participants.FirstOrDefault(x => x.ParticipantID == participant.ParticipantID);
                 db_part.ParticipantStatus = "active";
                 db_part.Delete();
-                return Ok();
+                return Ok(new ApiCallbackMessage("Success", true));
             }
         }
     }

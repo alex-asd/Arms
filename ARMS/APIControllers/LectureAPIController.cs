@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using System.Xml;
 using ARMS.Data;
+using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
 {
@@ -43,7 +44,7 @@ namespace ARMS.APIControllers
         public IHttpActionResult UpdateLecture([FromBody] Lecture lecture)
         {
             lecture.Update();
-            return Ok();
+            return Ok(new ApiCallbackMessage("Success", true));
         }
 
         [HttpGet]
