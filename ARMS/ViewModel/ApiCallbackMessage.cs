@@ -8,7 +8,11 @@
         public ApiCallbackMessage()
         {
         }
-        
-        
+
+        public ApiCallbackMessage(string body, bool success)
+        {
+            Body = body;
+            Success = success;
+        }
     }
 }

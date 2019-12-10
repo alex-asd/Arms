@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using ARMS.Data;
 using ARMS.Helpers;
+using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
 {
@@ -25,7 +26,7 @@ namespace ARMS.APIControllers
                 var attendance = dc.Attendees.Where(x => x.LectureID == lecture_id && x.UserID == user_id).Count();
                 if (attendance == 1)
                 {
-                    return Ok();
+                    return Ok(new ApiCallbackMessage("Success", true));
                 }
 
                 return NotFound();
@@ -50,7 +51,7 @@ namespace ARMS.APIControllers
                 var attendace = new Attendee(user_id, lecture_id, bluetooth_address);
                 attendace.Insert(BonusEnum.UpsertType.Insert);
 
-                return Ok();
+                return Ok(new ApiCallbackMessage("Success", true));
             }
         }
     }

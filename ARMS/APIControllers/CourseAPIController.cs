@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using ARMS.Data;
 using ARMS.Helpers;
+using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
 {
@@ -79,7 +80,7 @@ namespace ARMS.APIControllers
             }
 
             courseToUpdate.Update();
-            return Ok();
+            return Ok(new ApiCallbackMessage("Success", true));
         }
 
         [HttpPost]
@@ -114,7 +115,7 @@ namespace ARMS.APIControllers
             {
                 dc.Supervisors.Add(new Supervisor(userToAdd.UserID, courseToAddTo.CourseID));
                 dc.SaveChanges();
-                return Ok();
+                return Ok(new ApiCallbackMessage("Success", true));
             }
         }
     }
