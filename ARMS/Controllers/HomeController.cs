@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ARMS.Data.Helpers;
+using ARMS.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -25,6 +27,25 @@ namespace ARMS.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult Search()
+        {
+            ViewBag.Message = "Enter the desired course name";
+
+            return View(new List<Course>());
+        }
+
+        [HttpPost]
+        [Authorize]
+        public ActionResult Search(string searchString)
+        {
+            ViewBag.SearchKey = searchString;
+            var list = CourseHelper.SearchCoursesFor(searchString);
+
+            return View(list);
         }
     }
 }

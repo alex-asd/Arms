@@ -1,0 +1,65 @@
+﻿@model IEnumerable<ARMS.Data.Models.Course>
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Search for a course</h2>
+
+@using (Html.BeginForm("Search", "Home", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <input type="text" id="searchString" name="searchString">
+
+    <input type="submit" id="submitId" value="Submit" />
+}
+
+@if (ViewBag.SearchKey != null)
+{
+    <h4>@ViewBag.SearchKey</h4>
+    if (Model.Count() >= 1)
+    {
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Creator.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CourseDescription)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Creator.FirstName)
+                        @Html.DisplayFor(modelItem => item.Creator.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CourseDescription)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "Details", "Courses", new { courseId = item.CourseID }, null)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else
+    {
+        <h5>No result following your search were found!</h5><br />
+        <h6>Please try again</h6>
+    }
+}
+
+

@@ -11,10 +11,13 @@ namespace ARMS.Data.Models
 {
     public class Participant
     {
-        [NotMapped] public static readonly string STATUS_ACTIVE = "active";
-        [NotMapped] public static readonly string STATUS_PENDING = "pending";
+        [NotMapped]
+        public static readonly string STATUS_ACTIVE = "active";
+        [NotMapped]
+        public static readonly string STATUS_PENDING = "pending";
 
-        [Display(Name = "Participant Status")] public string ParticipantStatus { get; set; }
+        [Display(Name = "Participant Status")]
+        public string ParticipantStatus { get; set; }
 
         [Key, Column(Order = 0)]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -31,9 +34,7 @@ namespace ARMS.Data.Models
         public virtual User User { get; set; }
         public virtual Course Course { get; set; }
 
-        public Participant()
-        {
-        }
+        public Participant() { }
 
         public Participant(int userId, int courseId, string participantStatus)
         {

@@ -399,6 +399,7 @@ namespace ARMS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
         {
+            CurrentWebContext.CurrentUser = null;
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
         }

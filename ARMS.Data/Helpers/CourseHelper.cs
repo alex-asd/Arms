@@ -96,39 +96,76 @@ namespace ARMS.Data.Helpers
         // get courses for current student logged in
         public static List<Course> GetCoursesForParticipant(int userId)
         {
+            var list = new List<Course>();
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var list = dc.Participants.Where(ps => ps.UserID == userId).Select(ps => ps.Course).Include(c => c.Creator).ToList();
-                    
-                    return list.ToList();
+                    list = dc.Participants.Where(ps => ps.UserID == userId).Select(ps => ps.Course).Include(c => c.Creator).ToList();
                 }
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
-            return null;
+            return list;
         }
 
         // get courses for current teacher logged in
         public static List<Course> GetCoursesForSupervisor(int userId)
         {
+            var list = new List<Course>();
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var list = dc.Supervisors.Where(ps => ps.UserID == userId).Select(ps => ps.Course).Include(c => c.Creator).ToList();
-                    
-                    return list.ToList();
+                    list = dc.Supervisors.Where(sp => sp.UserID == userId).Select(sp => sp.Course).Include(c => c.Creator).ToList();
                 }
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
-            return null;
+            return list;
+        }
+
+        // search for course containing the specified string
+        public static List<Course> SearchCoursesFor(string searchString)
+        {
+            var list = new List<Course>();
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    if (!string.IsNullOrEmpty(searchString))
+                    {
+                        list = dc.Courses.Where(c => c.CourseName.Contains(searchString)).Include(c => c.Creator).ToList();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return list;
+        }
+
+        // return true/false depending if the current user is a participant of the course
+        public static bool IsStudentPartOfCourse(int userId, int courseId)
+        {
+            var boolean = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    boolean = dc.Participants.Any(p => p.UserID == userId && p.CourseID == courseId);
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return boolean;
         }
     }
 }

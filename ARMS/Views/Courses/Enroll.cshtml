@@ -1,0 +1,10 @@
+﻿@using ARMS.Helpers
+@{
+    ViewBag.Title = "Enroll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Message</h2>
+<br />
+@Html.ActionLink("See your courses", "Index", new { userId = CurrentWebContext.CurrentUser.UserID })
+

@@ -21,7 +21,7 @@ namespace ARMS.Controllers
         {
             List<Course> courses = null;
 
-            if(CurrentWebContext.CurrentUser.Type == "student")
+            if (CurrentWebContext.CurrentUser.Type == "student")
                 courses = CourseHelper.GetCoursesForParticipant(userId);
 
             if (CurrentWebContext.CurrentUser.Type == "teacher")
@@ -39,23 +39,36 @@ namespace ARMS.Controllers
             }
 
             int courseID = (int)courseId;
-
             Course course = CourseHelper.GetById(courseID);
+
             if (course == null)
             {
                 return HttpNotFound();
             }
 
-            var vm = new DetailedCourseVM(course)
+            ViewBag.IsParticipant = false;
+            var viewModel = new DetailedCourseVM(course);
+
+            // check if the current user is a teacher and setup accordingly the view model
+            if (CurrentWebContext.CurrentUser.Type == "teacher")
             {
-                Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID),
-                Lectures = LectureHelper.GetLecturesForCourse(courseID),
-                Participants = UserHelper.GetParticipantsForCourse(courseID)
-            };
 
-            ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
+                viewModel = new DetailedCourseVM(course)
+                {
+                    Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID),
+                    Lectures = LectureHelper.GetLecturesForCourse(courseID),
+                    Participants = UserHelper.GetParticipantsForCourse(courseID)
+                };
 
-            return View(vm);
+                ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
+            }
+            // if the user is not a teacher, is he a participant of the course
+            else if (CourseHelper.IsStudentPartOfCourse(CurrentWebContext.CurrentUser.UserID, viewModel.CourseID))
+            {
+                ViewBag.IsParticipant = true;
+            }
+
+            return View(viewModel);
         }
 
         // GET: Courses/Create
@@ -151,6 +164,33 @@ namespace ARMS.Controllers
             }
 
             return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
+        }
+
+        // GET: Courses/Enroll/userId?courseId
+        public ActionResult Enroll(int userId, int? courseId)
+        {
+            if (courseId == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            int courseID = (int)courseId;
+            Course course = CourseHelper.GetById(courseID);
+
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            
+            var participant = new Participant(userId, courseID, Participant.STATUS_PENDING);
+            var success = participant.Insert();
+
+            if (success)
+                ViewBag.Message = "Successfully applied for the course, a course supervisor must approve you!";
+            else
+                ViewBag.Message = "Something went wrong! Please try again.";
+
+            return View();
         }
         
         protected override void Dispose(bool disposing)
