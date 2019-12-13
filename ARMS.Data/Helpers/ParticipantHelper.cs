@@ -67,8 +67,9 @@ namespace ARMS.Data.Helpers
         }
 
         // deletes a student with the targeted id
-        public static void DeleteParticipant(int userId, int courseId)
+        public static bool DeleteParticipant(int userId, int courseId)
         {
+            var success = false;
             try
             {
                 using (var dc = new ArmsContext())
@@ -78,11 +79,13 @@ namespace ARMS.Data.Helpers
 
                     dc.SaveChanges();
                 }
+                success = true;
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
+            return success;
         }
 
         // get all participants for course

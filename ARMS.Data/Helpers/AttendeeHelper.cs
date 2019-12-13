@@ -32,8 +32,9 @@ namespace ARMS.Data.Helpers
         }
 
         // deletes a attendee with the targeted id
-        public static void DeleteAttendee(int lectureId, int userId)
+        public static bool DeleteAttendee(int lectureId, int userId)
         {
+            var success = false;
             try
             {
                 using (var dc = new ArmsContext())
@@ -43,11 +44,13 @@ namespace ARMS.Data.Helpers
 
                     dc.SaveChanges();
                 }
+                success = true;
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
+            return success;
         }
 
         //get all attendees (users) for the lecture

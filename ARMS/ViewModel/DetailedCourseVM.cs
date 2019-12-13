@@ -21,6 +21,7 @@ namespace ARMS.ViewModel
         public int CreatorID { get; set; }
         
         public List<int> AttendancePercentage { get; set; }
+        public List<User> PendingParticipants { get; set; }
         public List<User> Participants { get; set; }
         public List<Lecture> Lectures { get; set; }
         public List<User> Supervisors { get; set; }

@@ -13,7 +13,7 @@ namespace ARMS.Data.Helpers
 {
     public static class SupervisorHelper
     {
-        // get teacher by id
+        // get teacher by supervisor id
         public static Supervisor GetById(int supervisorId)
         {
             var model = Get(supervisorId);
@@ -21,14 +21,14 @@ namespace ARMS.Data.Helpers
         }
 
         // get teacher by username
-        public static Supervisor GetByUsername(string email)
+        public static Supervisor GetByUserIdCourseId(int userId, int courseId)
         {
-            var model = Get(0, email);
+            var model = Get(0, userId, courseId);
             return model;
         }
 
         // get the actual teacher object
-        private static Supervisor Get(int userId = 0, string email = null)
+        private static Supervisor Get(int supervisorId = 0, int userId = 0, int courseId = 0)
         {
             Supervisor model = null;
 
@@ -37,13 +37,13 @@ namespace ARMS.Data.Helpers
                 using (var dc = new ArmsContext())
                 {
                     // User id if given
-                    if (userId > 0)
+                    if (supervisorId > 0)
                     {
-                        model = dc.Supervisors.Include(x => x.Course).FirstOrDefault(x => x.User.UserID == userId);
+                        model = dc.Supervisors.Include(x => x.Course).FirstOrDefault(x => x.SupervisorID == supervisorId);
                     }
-                    else if (email != null)
+                    else if (userId > 0 && courseId > 0)
                     {
-                        model = dc.Supervisors.Include(x => x.Course).FirstOrDefault(x => x.User.Email == email);
+                        model = dc.Supervisors.Include(x => x.Course).FirstOrDefault(x => x.User.UserID == userId && x.CourseID == courseId);
                     }
                 }
             }
@@ -57,24 +57,25 @@ namespace ARMS.Data.Helpers
         // get all supervisors (users) for the specified course
         public static List<User> GetSupervisorsForCourse(int courseId)
         {
+            var users = new List<User>();
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    var users = dc.Supervisors.Where(ps => ps.CourseID == courseId).Select(ps => ps.User).ToList();
-                    return users;
+                    users = dc.Supervisors.Where(s => s.CourseID == courseId).Select(s => s.User).ToList();
                 }
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
-            return null;
+            return users;
         }
         
         // deletes a teacher with the targeted id
-        public static void DeleteSupervisor(int userId, int courseId)
+        public static bool DeleteSupervisor(int userId, int courseId)
         {
+            var success = false;
             try
             {
                 using (var dc = new ArmsContext())
@@ -84,11 +85,13 @@ namespace ARMS.Data.Helpers
 
                     dc.SaveChanges();
                 }
+                success = true;
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
+            return success;
         }
 
         // for testing purposes

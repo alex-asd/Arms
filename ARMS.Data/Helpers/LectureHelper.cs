@@ -32,8 +32,9 @@ namespace ARMS.Data.Helpers
         }
 
         // deletes a lecture with the targeted id
-        public static void DeleteLecture(int lectureId)
+        public static bool DeleteLecture(int lectureId)
         {
+            var success = false;
             try
             {
                 using (var dc = new ArmsContext())
@@ -43,11 +44,13 @@ namespace ARMS.Data.Helpers
 
                     dc.SaveChanges();
                 }
+                success = true;
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
+            return success;
         }
 
         // for testing purposes

@@ -10,6 +10,7 @@ using ARMS.Data.Helpers;
 
 namespace ARMS.APIControllers
 {
+    [Authorize]
     public class UtilController : ApiController
     {
 

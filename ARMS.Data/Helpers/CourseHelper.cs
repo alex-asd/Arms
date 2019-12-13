@@ -65,8 +65,9 @@ namespace ARMS.Data.Helpers
         }
 
         // deletes a Course with the targeted name
-        public static void DeleteCourse(string courseName)
+        public static bool DeleteCourse(string courseName)
         {
+            var success = false;
             try
             {
                 using (var dc = new ArmsContext())
@@ -76,11 +77,13 @@ namespace ARMS.Data.Helpers
 
                     dc.SaveChanges();
                 }
+                success = true;
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
+            return success;
         }
 
         // for testing purposes

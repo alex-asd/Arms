@@ -73,22 +73,24 @@ namespace ARMS.Data.Helpers
         }
 
         // deletes a user with the specified userId
-        public static void DeleteUser(int userId)
+        public static bool DeleteUser(int userId)
         {
+            var success = false;
             try
             {
                 using (var dc = new ArmsContext())
                 {
                     var User = dc.Users.Where(u => u.UserID == userId).FirstOrDefault();
                     dc.Users.Remove(User);
-
                     dc.SaveChanges();
                 }
+                success = true;
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
+            return success;
         }
 
         // get all students (users) for the specified course

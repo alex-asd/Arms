@@ -46,13 +46,20 @@ namespace ARMS.Controllers
                 return HttpNotFound();
             }
 
-            ViewBag.IsParticipant = false;
-            var viewModel = new DetailedCourseVM(course);
+            var viewModel = new DetailedCourseVM();
+
+            if(CurrentWebContext.CurrentUser.Type == "student")
+            {
+                ViewBag.IsParticipant = false;
+                viewModel = new DetailedCourseVM(course);
+                // if the user is not a teacher, is he a participant of the course
+                if (CourseHelper.IsStudentPartOfCourse(CurrentWebContext.CurrentUser.UserID, viewModel.CourseID))
+                    ViewBag.IsParticipant = true;
+            }
 
             // check if the current user is a teacher and setup accordingly the view model
             if (CurrentWebContext.CurrentUser.Type == "teacher")
             {
-
                 viewModel = new DetailedCourseVM(course)
                 {
                     Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID),
@@ -62,12 +69,6 @@ namespace ARMS.Controllers
 
                 ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
             }
-            // if the user is not a teacher, is he a participant of the course
-            else if (CourseHelper.IsStudentPartOfCourse(CurrentWebContext.CurrentUser.UserID, viewModel.CourseID))
-            {
-                ViewBag.IsParticipant = true;
-            }
-
             return View(viewModel);
         }
 
@@ -126,7 +127,8 @@ namespace ARMS.Controllers
             {
                 Supervisors = supervisors,
                 Lectures = LectureHelper.GetLecturesForCourse(courseID),
-                Participants = UserHelper.GetParticipantsForCourse(courseID)
+                Participants = UserHelper.GetParticipantsForCourse(courseID),
+                PendingParticipants = UserHelper.GetPendingParticipantsForCourse(courseID)
             };
 
             ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
