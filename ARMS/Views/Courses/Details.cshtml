@@ -95,6 +95,9 @@
                     Email
                 </th>
                 <th>
+                    Detailed Overview
+                </th>
+                <th>
                     Attendance
                 </th>
             </tr>
@@ -108,6 +111,9 @@
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Go", "SeeDetailedOverview", new { courseId = Model.CourseID, studentId = item.UserID })
                     </td>
                     <td>
                         @ParticipantHelper.GetParticipantAttendance(item.UserID, Model.CourseID)%

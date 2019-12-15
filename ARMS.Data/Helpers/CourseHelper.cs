@@ -72,7 +72,7 @@ namespace ARMS.Data.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    var Course = dc.Courses.Where(u => u.CourseName == courseName.ToLower()).FirstOrDefault();
+                    var Course = dc.Courses.Where(u => u.CourseName == courseName).FirstOrDefault();
                     dc.Courses.Remove(Course);
 
                     dc.SaveChanges();

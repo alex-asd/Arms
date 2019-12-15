@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            @Html.HiddenFor(model => model.CreatorID)
+            @Html.EditorFor(model => model.CourseID, new { htmlAttributes = new { placeholder = ViewBag.UserID, @readonly = "readonly", disabled = "disabled", @class = "hidden form-control" } })
         </div>
 
         <div class="form-group">

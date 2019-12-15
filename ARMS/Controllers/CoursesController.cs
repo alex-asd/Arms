@@ -89,6 +89,7 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                course.CreatorID = CurrentWebContext.CurrentUser.UserID;
                 course.Insert();
 
                 var model = new Supervisor(CurrentWebContext.CurrentUser.UserID, course.CourseID);
@@ -160,7 +161,9 @@ namespace ARMS.Controllers
                 return HttpNotFound();
             }
 
-            return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
+            course.Delete();
+
+            return View();
         }
 
         // GET: Courses/Enroll/userId?courseId
@@ -188,6 +191,22 @@ namespace ARMS.Controllers
                 ViewBag.Message = "Something went wrong! Please try again.";
 
             return View();
+        }
+
+        public ActionResult SeeDetailedOverview(int courseId, int studentId)
+        {
+            Course course = CourseHelper.GetById(courseId);
+            User student = UserHelper.GetById(studentId);
+
+            if (course == null || student == null)
+            {
+                return HttpNotFound();
+            }
+
+            ViewBag.AttendancePerformance = ParticipantHelper.GetParticipantAttendance(student.UserID, course.CourseID);
+
+            var vm = DetailedOverviewForStudentVM.CreateDetailedOverviewForStudentVM(student, course);
+            return View(vm);
         }
         
         protected override void Dispose(bool disposing)

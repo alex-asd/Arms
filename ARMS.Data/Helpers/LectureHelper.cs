@@ -82,5 +82,23 @@ namespace ARMS.Data.Helpers
 
             return list;
         }
+
+        // get all attended lectures for student in course
+        public static List<Lecture> GetAllAttendedLecturesForStudent(int courseId, int userId)
+        {
+            var list = new List<Lecture>();
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    list = dc.Attendees.Where(u => u.UserID == userId).Select(l => l.Lecture).Where(c => c.CourseID == courseId).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return list;
+        }
     }
 }

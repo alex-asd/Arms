@@ -53,7 +53,7 @@ namespace ARMS.Data.Helpers
             return success;
         }
 
-        //get all attendees (users) for the lecture
+        // get all attendees (users) for the lecture
         public static List<User> GetAttendeesForLecture(int lectureId)
         {
             var list = new List<User>();

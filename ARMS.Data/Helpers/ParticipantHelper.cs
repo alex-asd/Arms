@@ -13,7 +13,7 @@ namespace ARMS.Data.Helpers
     public static class ParticipantHelper
     {
         // get lecture by id
-        public static Participant GetById(int participantId)
+        public static Participant GetById(int userId, int courseId)
         {
             Participant model = null;
 
@@ -21,7 +21,7 @@ namespace ARMS.Data.Helpers
             {
                 using (var dc = new ArmsContext())
                 {
-                    model = dc.Participants.Include(x => x.User).Include(x => x.Course).FirstOrDefault(x => x.ParticipantID == participantId);
+                    model = dc.Participants.Include(x => x.User).Include(x => x.Course).FirstOrDefault(x => x.UserID == userId && x.CourseID == courseId);
                 }
             }
             catch (Exception ex)
@@ -63,7 +63,7 @@ namespace ARMS.Data.Helpers
             {
                 var msg = ex.Message;
             }
-            return result;
+            return Math.Round(result, 2);
         }
 
         // deletes a student with the targeted id

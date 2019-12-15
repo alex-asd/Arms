@@ -51,7 +51,7 @@ namespace ARMS.APIControllers
         [Route("API/Util/ApproveParticipant")]
         public void ApproveParticipant(int userId, int courseId)
         {
-            var participant = ParticipantHelper.GetById(userId);
+            var participant = ParticipantHelper.GetById(userId, courseId);
             if (participant == null)
                 return;
             participant.ParticipantStatus = Participant.STATUS_ACTIVE;
