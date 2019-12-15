@@ -14,6 +14,7 @@ using ARMS.ViewModel;
 
 namespace ARMS.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         // GET: Courses
@@ -123,17 +124,11 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
-            var vm = new DetailedCourseVM(course)
-            {
-                Supervisors = supervisors,
-                Lectures = LectureHelper.GetLecturesForCourse(courseID),
-                Participants = UserHelper.GetParticipantsForCourse(courseID),
-                PendingParticipants = UserHelper.GetPendingParticipantsForCourse(courseID)
-            };
+            var viewModel = DetailedCourseVM.CreateDetailedCourseVMW(course, supervisors);
 
             ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
 
-            return View(vm);
+            return View(viewModel);
         }
 
         // POST: Courses/Edit/5

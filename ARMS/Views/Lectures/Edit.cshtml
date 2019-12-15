@@ -18,6 +18,12 @@
     <h4>Lecture</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    @if (ViewBag.DateError != null)
+    {
+        <h2>@ViewBag.DateError</h2>
+    }
+
     @Html.HiddenFor(model => model.LectureID)
 
     <div class="form-group">
@@ -80,7 +86,9 @@
                         @item.Email
                     </td>
                     <td>
-                        <a class="async-delete" data-type="attendee" data-user-id="@item.UserID" data-lecture-id="@Model.LectureID" href="/Api/Util/DeleteAttendee"><span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span></a>
+                        <a class="async-delete" data-type="attendee" data-user-id="@item.UserID" data-lecture-id="@Model.LectureID" href="/Api/Util/DeleteAttendee" onclick="return confirm('Are you sure you want to remove this student?');">
+                            <span class="glyphicon glyphicon-remove text-danger gi-12x text-center" aria-hidden="true"></span>
+                        </a>
                     </td>
                 </tr>
             }

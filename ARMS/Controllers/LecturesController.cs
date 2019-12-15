@@ -12,6 +12,7 @@ using ARMS.Data.Helpers;
 
 namespace ARMS.Controllers
 {
+    [Authorize]
     public class LecturesController : Controller
     {
         // GET: Lectures
@@ -63,10 +64,15 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (lecture.From >= lecture.To)
+                {
+                    ViewBag.DateError = "Lecture from cannot be equal or after To";
+                    return View(lecture);
+                }
+
                 lecture.Insert();
                 return RedirectToAction("Index", new { courseId = lecture.CourseID });
             }
-
             return View(lecture);
         }
 
@@ -99,6 +105,12 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(lecture.From >= lecture.To)
+                {
+                    ViewBag.DateError = "Lecture from cannot be equal or after To";
+                    return View(lecture);
+                }
+
                 lecture.Insert();
                 return RedirectToAction("Index", lecture.CourseID);
             }

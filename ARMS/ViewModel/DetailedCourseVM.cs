@@ -36,5 +36,17 @@ namespace ARMS.ViewModel
             this.CourseDescription = course.CourseDescription;
             this.Creator = course.Creator;
         }
+
+        public static DetailedCourseVM CreateDetailedCourseVMW(Course course, List<User> list)
+        {
+            var vm = new DetailedCourseVM(course)
+            {
+                Supervisors = list,
+                Lectures = LectureHelper.GetLecturesForCourse(course.CourseID),
+                Participants = UserHelper.GetParticipantsForCourse(course.CourseID),
+                PendingParticipants = UserHelper.GetPendingParticipantsForCourse(course.CourseID)
+            };
+            return vm;
+        }
     }
 }

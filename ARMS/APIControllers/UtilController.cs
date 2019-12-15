@@ -21,6 +21,8 @@ namespace ARMS.APIControllers
             var user = UserHelper.GetByEmail(email);
             if (user == null)
                 return;
+            if (user.Type != "teacher")
+                return;
             var supervisor = new Supervisor(user.UserID, courseId);
             supervisor.Insert();
         }
@@ -38,6 +40,8 @@ namespace ARMS.APIControllers
         {
             var user = UserHelper.GetByEmail(email);
             if (user == null)
+                return;
+            if (user.Type != "student")
                 return;
             var participant = new Participant(user.UserID, courseId, Participant.STATUS_ACTIVE);
             participant.Insert();
