@@ -45,7 +45,7 @@ namespace ARMS.APIControllers
                     .Where(x => x.LectureID == lecture_id && x.BluetoothAddress == bluetooth_address).Count();
                 if (existing_attendance >= 1)
                 {
-                    return BadRequest("This device was already used to check-in.");
+                    return Ok(new ApiCallbackMessage("This device was already used to check-in.", true));
                 }
 
                 var attendace = new Attendee(user_id, lecture_id, bluetooth_address);

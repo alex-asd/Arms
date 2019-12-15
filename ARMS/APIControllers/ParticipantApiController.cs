@@ -48,6 +48,16 @@ namespace ARMS.APIControllers
             }
         }
 
+
+        [HttpGet]
+        [Authorize]
+        [Route("get-participant-attendance")]
+        public IHttpActionResult GetParticipantAttendance(int course_id, int user_id)
+        {
+            var attendance = ParticipantHelper.GetParticipantAttendance(user_id, course_id);
+            return Ok(new ApiCallbackMessage(attendance.ToString(), true));
+        }
+
         [HttpPost]
         [Authorize]
         [Route("apply")]
