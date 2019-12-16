@@ -13,6 +13,7 @@ using ARMS.Data.Helpers;
 namespace ARMS.Controllers
 {
     [Authorize]
+    [RoutePrefix("Lectures")]
     public class LecturesController : Controller
     {
         // GET: Lectures
@@ -118,7 +119,7 @@ namespace ARMS.Controllers
 
         // GET: Lectures/Delete/5
         [Route("Lectures/Delete")]
-        public ActionResult Delete(int? lectureId)
+        public ActionResult Delete(int courseId, int? lectureId)
         {
             if (lectureId == null)
             {
@@ -134,6 +135,7 @@ namespace ARMS.Controllers
 
             var success = lecture.Delete();
             ViewBag.Success = success;
+            ViewBag.CourseID = courseId;
 
             return View();
         }

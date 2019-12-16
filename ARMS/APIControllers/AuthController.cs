@@ -17,7 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ARMS.APIControllers
 {
-    [RoutePrefix("auth")]
+    [RoutePrefix("api/auth")]
     public class AuthController : ApiController
     {
         [HttpGet]

@@ -18,17 +18,19 @@
                 <ul class="dropdown-menu" aria-labelledby="dropdownMainMenu">
                     @if (CurrentWebContext.CurrentUser.Type == "student")
                     {
-                    <li>
-                        @Html.ActionLink("Search for Course", "Search", "Home")
-                    </li>
+                        <li>
+                            @Html.ActionLink("Search for Course", "Search", "Home")
+                        </li>
+                        <li>
+                            @Html.ActionLink("See my Courses", "Index", "Courses", new { userId = CurrentWebContext.CurrentUser.UserID }, null)
+                        </li>
                     }
                     @if (CurrentWebContext.CurrentUser.Type == "teacher")
                     {
-                        // smthn
+                        <li>
+                            @Html.ActionLink("See all managed Courses", "Index", "Courses", new { userId = CurrentWebContext.CurrentUser.UserID }, null)
+                        </li>
                     }
-                    <li>
-                        @Html.ActionLink("See my Courses", "Index", "Courses", new { userId = CurrentWebContext.CurrentUser.UserID }, null)
-                    </li>
                     <li>
                         @Html.ActionLink("Manage Account", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
                     </li>

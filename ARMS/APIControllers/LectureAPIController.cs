@@ -12,7 +12,7 @@ using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
 {
-    [RoutePrefix("lectures")]
+    [RoutePrefix("api/lectures")]
     public class LectureApiController : ApiController
     {
         [HttpGet]

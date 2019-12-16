@@ -44,7 +44,7 @@
         <td>
             @Html.ActionLink("Edit", "Edit", new { courseId = item.CourseID, lectureId = item.LectureID }) |
             @Html.ActionLink("Details", "Details", new { courseId = item.CourseID, lectureId = item.LectureID }) |
-            @Html.ActionLink("Delete", "Delete", "Lectures", new { lectureId = item.LectureID }, new { onclick = "return confirm('Are you sure you want to delete this lecture?');", @class = "text-danger" })
+            @Html.ActionLink("Delete", "Delete", "Lectures", new { courseId = item.CourseID, lectureId = item.LectureID }, new { onclick = "return confirm('Are you sure you want to delete this lecture?');", @class = "text-danger" })
         </td>
     </tr>
 }
