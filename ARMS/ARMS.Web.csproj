@@ -261,8 +261,13 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\classroom.jpg" />
+    <Content Include="Images\example-uni.jpg" />
+    <Content Include="Images\half-empty.png" />
     <Content Include="Images\index-image-1.png" />
     <Content Include="Images\index-image-2.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\textbooks.jpg" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <None Include="Properties\Settings.settings">

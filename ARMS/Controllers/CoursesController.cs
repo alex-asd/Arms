@@ -81,8 +81,6 @@ namespace ARMS.Controllers
         }
 
         // POST: Courses/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseID,CourseName,CourseDescription,CreatorID")] Course course)
@@ -133,8 +131,6 @@ namespace ARMS.Controllers
         }
 
         // POST: Courses/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseID,CourseName,CourseDescription,CreatorID, Supervisors, Participants, Lectures")] DetailedCourseVM model)
@@ -160,8 +156,10 @@ namespace ARMS.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.Title = course.CourseName;
 
-            course.Delete();
+            var success = course.Delete();
+            ViewBag.Success = success;
 
             return View();
         }

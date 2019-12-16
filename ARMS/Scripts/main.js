@@ -43,6 +43,15 @@ arms.util = {
                 if (typeof (completeCallback) === 'function' && completeCallback !== null) completeCallback(response);
             }
         });
+    },
+
+    confirmDelete: function (what) {
+        var result = false;
+
+        if (confirm("Are you sure you want to delete this " + what)) {
+            result = true;
+        }
+        return result;
     }
 }
 
@@ -76,6 +85,10 @@ $('.async-delete').click(function (e) {
     var href = that.prop('href');
 
     var type = that.data('type');
+
+    var bool = arms.util.confirmDelete(type);
+    if (!bool)
+        return;
 
     var url;
 

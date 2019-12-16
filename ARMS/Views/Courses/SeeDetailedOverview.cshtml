@@ -4,6 +4,7 @@
 @{
     ViewBag.Title = "View";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var numOfAtt = Model.AttendedLectures.Count();
 }
 
 <h2>Detailed overview for @Model.FirstName @Model.LastName</h2>
@@ -61,7 +62,7 @@
         </dd>
 
         <dd>
-            @Model.AttendedLectures.Count() / @Model.AllLectures.Count()
+            @numOfAtt / @Model.AllLectures.Count()
         </dd>
 
         <dd>
@@ -69,37 +70,44 @@
         </dd>
     </dl>
 
-    
+
 
     <br />
-    <h4>List of attended lectures</h4>
+    @if (numOfAtt < 1)
+    {
+        <h4>Student has not attended any lectures</h4>
+    }
+    else
+    {
+        <h4>List of attended lectures</h4>
 
-    <table class="custom-table">
-        <tr>
-            <th>
-                From
-            </th>
-            <th>
-                To
-            </th>
-            <th>
-
-            </th>
-        </tr>
-
-        @foreach (var item in Model.AttendedLectures)
-        {
+        <table class="custom-table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.From)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.To)
-                </td>
-                <td>@Html.ActionLink("Edit this lecture", "Edit", "Lectures", new { courseId = Model.CourseID, lectureId = item.LectureID }, null)</td>
+                <th>
+                    From
+                </th>
+                <th>
+                    To
+                </th>
+                <th>
+
+                </th>
             </tr>
-        }
-    </table>
+
+            @foreach (var item in Model.AttendedLectures)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.From)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.To)
+                    </td>
+                    <td>@Html.ActionLink("Edit this lecture", "Edit", "Lectures", new { courseId = Model.CourseID, lectureId = item.LectureID }, null)</td>
+                </tr>
+            }
+        </table>
+    }
 </div>
 <p>
     @Html.ActionLink("Back to detials", "Details", new { courseId = Model.CourseID }) |

@@ -1,8 +1,15 @@
 ﻿@model ARMS.Data.Models.Course
 @using ARMS.Helpers
 
-
-<h2>Successfully deleted!</h2>
+@if (ViewBag.Success)
+{
+    <h2>Successfully deleted @ViewBag.Title!</h2>
+}
+else
+{
+    <h2>Something went wrong!</h2>
+}
+<br />
 <div>
     @Html.ActionLink("Back to List", "Index", new { userId = CurrentWebContext.CurrentUser.UserID })
 </div>

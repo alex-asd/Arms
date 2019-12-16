@@ -113,7 +113,7 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td>
-                        @Html.ActionLink("Go", "SeeDetailedOverview", new { courseId = Model.CourseID, studentId = item.UserID })
+                        @Html.ActionLink("See", "SeeDetailedOverview", new { courseId = Model.CourseID, studentId = item.UserID })
                     </td>
                     <td>
                         @ParticipantHelper.GetParticipantAttendance(item.UserID, Model.CourseID)%

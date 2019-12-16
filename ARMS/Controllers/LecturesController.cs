@@ -56,8 +56,6 @@ namespace ARMS.Controllers
         }
 
         // POST: Lectures/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "LectureID,From,To,CheckInEnabled,CourseID")] Lecture lecture)
@@ -97,8 +95,6 @@ namespace ARMS.Controllers
         }
 
         // POST: Lectures/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "LectureID,From,To,CheckInEnabled,CourseID")] Lecture lecture)
@@ -121,6 +117,7 @@ namespace ARMS.Controllers
         }
 
         // GET: Lectures/Delete/5
+        [Route("Lectures/Delete")]
         public ActionResult Delete(int? lectureId)
         {
             if (lectureId == null)
@@ -135,9 +132,10 @@ namespace ARMS.Controllers
                 return HttpNotFound();
             }
 
-            lecture.Delete();
+            var success = lecture.Delete();
+            ViewBag.Success = success;
 
-            return RedirectToAction("Index", lecture.CourseID);
+            return View();
         }
 
         protected override void Dispose(bool disposing)

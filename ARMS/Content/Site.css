@@ -37,30 +37,6 @@ hr {
     padding: 0;
 }
 
-.index-image-one, .index-image-two {
-    position: relative;
-    opacity: 0.95;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: 50% 50%;
-}
-
-.index-image-one {
-    /* The image used */
-    background-image: url(../Images/index-image-1.png);
-    height: 645px;
-    width: 100%;
-}
-
-.index-image-two {
-    /* The image used */
-    background-image: url(../Images/index-image-2.png);
-    height: 733px;
-    min-width: 926px;
-}
-
 .caption {
     position: absolute;
     left: 0;
@@ -77,6 +53,13 @@ hr {
     font-size: 25px;
     letter-spacing: 10px;
     padding-right: 7px;
+}
+
+.logo {
+    background-image: url(../Images/logo.png);
+    background-repeat: no-repeat;
+    min-height: 50px;
+    min-width: 50px;
 }
 
 .article {
@@ -121,6 +104,31 @@ a {
 
 /*CUSTOM CSS*/
 
+.index-image-one, .index-image-two {
+    position: relative;
+    opacity: 0.95;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.index-image-one {
+    /* The image used */
+    background-image: url(../Images/example-uni.jpg);
+    min-height: 800px;
+    min-width: 926px;
+    width: auto;
+}
+
+.index-image-two {
+    /* The image used */
+    background-image: url(../Images/textbooks.jpg);
+    height: 733px;
+    min-width: 926px;
+}
+
 .custom-table {
   margin: 5px 0px 50px 0px;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
@@ -160,3 +168,17 @@ a {
 .gi-3x {
     font-size: 3em;
 }
+
+.about-image-one {
+    background-image: url(../Images/classroom.jpg);
+}
+
+.about-image-two {
+    background-image: url(../Images/half-empty.png);
+}
+
+.about-image-two, .about-image-one {
+    width: 678px;
+    height: auto;
+    min-height: 380px;
+} 
