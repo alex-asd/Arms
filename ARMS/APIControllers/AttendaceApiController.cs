@@ -18,8 +18,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("has-attended-lecture")]
-        public IHttpActionResult UserAttendedLecture(int lecture_id, int user_id, string bluetooth_address)
+        public IHttpActionResult UserAttendedLecture(int lecture_id, string bluetooth_address)
         {
+            var user_id = APIUtils.GetUserFromClaim(ClaimsPrincipal.Current);
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
@@ -36,8 +37,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("attend")]
-        public IHttpActionResult UserAttend(int lecture_id, int user_id, string bluetooth_address)
+        public IHttpActionResult UserAttend(int lecture_id, string bluetooth_address)
         {
+            var user_id = APIUtils.GetUserFromClaim(ClaimsPrincipal.Current);
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;

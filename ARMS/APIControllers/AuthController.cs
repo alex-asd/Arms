@@ -12,6 +12,7 @@ using ARMS.Data.Helpers;
 using ARMS.Data.Models;
 using ARMS.Models;
 using ARMS.ViewModel;
+using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,6 +25,48 @@ namespace ARMS.APIControllers
         [Authorize]
         [Route("ok")]
         public IHttpActionResult Authenticated() => Ok("Authenticated");
+
+        [HttpPost]
+        [Authorize]
+        [Route("delete")]
+        public IHttpActionResult DeleteUser()
+        {
+            var claims = ClaimsPrincipal.Current.Claims;
+            var user_email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            var userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            var userExists = userManager.FindByEmailAsync(user_email.Value).Result;
+            if (userExists != null)
+            {
+                userManager.Delete(userExists);
+                var dbUser = UserHelper.GetByEmail(user_email.Value);
+                dbUser.Delete();
+                return Ok(new ApiCallbackMessage("Success", true));
+            }
+
+            return BadRequest();
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        [Route("edit")]
+        public IHttpActionResult EditUser([FromBody] User user)
+        {
+            var claims = ClaimsPrincipal.Current.Claims;
+            var user_email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
+            if (user_email.Value != user.Email)
+            {
+                return Unauthorized();
+            }
+
+            var success = user.Update();
+            if (success)
+            {
+                return Ok(new ApiCallbackMessage("Success", true));
+            }
+
+            return BadRequest();
+        }
 
 
         [HttpGet]

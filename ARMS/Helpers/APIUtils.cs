@@ -36,12 +36,11 @@ namespace ARMS.Helpers
             return userName?.Value;
         }
 
-        private static int GetUserFromClaim(ClaimsPrincipal claimsPrincipal)
+        public static int GetUserFromClaim(ClaimsPrincipal claimsPrincipal)
         {
             var email = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email);
             var user = UserHelper.GetByEmail(email?.Value);
             return user.UserID;
         }
-       
     }
 }

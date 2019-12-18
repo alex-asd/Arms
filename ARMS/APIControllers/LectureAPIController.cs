@@ -8,6 +8,7 @@ using System.Security.Claims;
 using System.Web.Http;
 using System.Xml;
 using ARMS.Data;
+using ARMS.Helpers;
 using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
@@ -96,9 +97,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("forteacher")]
-        public IHttpActionResult GetForTeacher(int id)
+        public IHttpActionResult GetForTeacher()
         {
-            var curr_user = UserHelper.GetById(id);
+            var curr_user = UserHelper.GetById(APIUtils.GetUserFromClaim(ClaimsPrincipal.Current));
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
@@ -128,9 +129,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("activeforstudent")]
-        public IHttpActionResult GetActiveLectureForStudent(int id)
+        public IHttpActionResult GetActiveLectureForStudent()
         {
-            var curr_user = UserHelper.GetById(id);
+            var curr_user = UserHelper.GetById(APIUtils.GetUserFromClaim(ClaimsPrincipal.Current));
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
@@ -146,9 +147,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("activeforteacher")]
-        public IHttpActionResult GetActiveLectureForTeacher(int id)
+        public IHttpActionResult GetActiveLectureForTeacher()
         {
-            var curr_user = UserHelper.GetById(id);
+            var curr_user = UserHelper.GetById(APIUtils.GetUserFromClaim(ClaimsPrincipal.Current));
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
