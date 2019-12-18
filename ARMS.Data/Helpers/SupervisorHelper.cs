@@ -94,6 +94,24 @@ namespace ARMS.Data.Helpers
             return success;
         }
 
+        // checks if the given id is matching a supervisors for the course specified
+        public static bool IsUserSupervisor(int userId, int courseId)
+        {
+            var isSupervisor = false;
+            try
+            {
+                using (var dc = new ArmsContext())
+                {
+                    isSupervisor = dc.Supervisors.Where(s => s.CourseID == courseId).Any(x => x.UserID == userId);
+                }
+            }
+            catch (Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return isSupervisor;
+        }
+
         // for testing purposes
         public static List<Supervisor> GetAllTeachers()
         {

@@ -17,7 +17,8 @@ namespace ARMS.Controllers
     [Authorize]
     public class CoursesController : Controller
     {
-        // GET: Courses
+        // GET: Courses/userId
+        // returns view containing all courses related to the logged in user
         public ActionResult Index(int userId)
         {
             List<Course> courses = null;
@@ -31,7 +32,8 @@ namespace ARMS.Controllers
             return View(courses.ToList());
         }
 
-        // GET: Courses/Details/5
+        // GET: Courses/Details/courseId
+        // returns details view with all related data depending on the logged in user
         public ActionResult Details(int? courseId)
         {
             if (courseId == null)
@@ -39,48 +41,50 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            int courseID = (int)courseId;
-            Course course = CourseHelper.GetById(courseID);
+            // cast nullable int
+            int id = (int)courseId;
+            Course course = CourseHelper.GetById(id);
 
             if (course == null)
             {
                 return HttpNotFound();
             }
 
-            var viewModel = new DetailedCourseVM();
+            DetailedCourseVM viewModel = null;
 
-            if(CurrentWebContext.CurrentUser.Type == "student")
+            // check if the current user is a student and setup accordingly the view model
+            if (CurrentWebContext.CurrentUser.Type == "student")
             {
                 ViewBag.IsParticipant = false;
                 viewModel = new DetailedCourseVM(course);
-                // if the user is not a teacher, is he a participant of the course
-                if (CourseHelper.IsStudentPartOfCourse(CurrentWebContext.CurrentUser.UserID, viewModel.CourseID))
-                    ViewBag.IsParticipant = true;
+                viewModel.Lectures = LectureHelper.GetLecturesForCourse(course.CourseID);
+                // get the type of student for this course
+                ViewBag.StatusOfStudent = CourseHelper.GetStudentStatusForCourse(CurrentWebContext.CurrentUser.UserID, course.CourseID);
             }
 
-            // check if the current user is a teacher and setup accordingly the view model
+            // check if the current user is a teacher and create the view model for him
             if (CurrentWebContext.CurrentUser.Type == "teacher")
             {
-                viewModel = new DetailedCourseVM(course)
-                {
-                    Supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID),
-                    Lectures = LectureHelper.GetLecturesForCourse(courseID),
-                    Participants = UserHelper.GetParticipantsForCourse(courseID)
-                };
-
-                ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
+                viewModel = DetailedCourseVM.CreateDetailedCourseVMW(course);
+                ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(id);
             }
             return View(viewModel);
         }
 
-        // GET: Courses/Create
+        // GET: Courses/Create/userId
+        // returns create view, where a teacher can  create a course
         public ActionResult Create(int userId)
         {
+            // if a student tries to access the url
+            if(CurrentWebContext.CurrentUser.Type == "student")
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
             ViewBag.UserID = userId;
             return View();
         }
 
-        // POST: Courses/Create
+        // POST: Courses/Create/course
+        // retrievs the new course and creates it if the state is valid
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "CourseID,CourseName,CourseDescription,CreatorID")] Course course)
@@ -98,7 +102,8 @@ namespace ARMS.Controllers
             return View(course);
         }
 
-        // GET: Courses/Edit/5
+        // GET: Courses/Edit/courseId
+        // returns edit view where a teacher can modify the course's data
         public ActionResult Edit(int? courseId)
         {
             if (courseId == null)
@@ -106,31 +111,32 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            int courseID = (int)courseId;
+            int id = (int)courseId;
 
-            Course course = CourseHelper.GetById(courseID);
+            Course course = CourseHelper.GetById(id);
             if (course == null)
             {
                 return HttpNotFound();
             }
 
             // check if the user trying to access the course is a supervisor
-            var supervisors = SupervisorHelper.GetSupervisorsForCourse(courseID);
-
+            var supervisors = SupervisorHelper.GetSupervisorsForCourse(id);
             // if he isn't, then return him => denied
-            if(!supervisors.Any(x => x.UserID == CurrentWebContext.CurrentUser.UserID))
-                {
+            if (!supervisors.Any(x => x.UserID == CurrentWebContext.CurrentUser.UserID))
+            {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
+            // create the viewmodel
             var viewModel = DetailedCourseVM.CreateDetailedCourseVMW(course, supervisors);
 
-            ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(courseID);
+            ViewBag.CountOfPendingStudents = ParticipantHelper.GetCountOfPendingParticipants(id);
 
             return View(viewModel);
         }
 
-        // POST: Courses/Edit/5
+        // POST: Courses/Edit/course
+        // retrieves the new data for the course and updates it in the database
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "CourseID,CourseName,CourseDescription,CreatorID, Supervisors, Participants, Lectures")] DetailedCourseVM model)
@@ -144,18 +150,29 @@ namespace ARMS.Controllers
             return RedirectToAction("Index", new { userId = CurrentWebContext.CurrentUser.UserID });
         }
 
-        // GET: Courses/Delete/5
+        // GET: Courses/Delete/courseId
+        // returns delete view with confirmation of the course being deleted
         public ActionResult Delete(int? courseId)
         {
             if (courseId == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = CourseHelper.GetById((int)courseId);
+
+            var id = (int)courseId;
+            Course course = CourseHelper.GetById(id);
+
             if (course == null)
             {
                 return HttpNotFound();
             }
+
+            var isSupervisor = SupervisorHelper.IsUserSupervisor(CurrentWebContext.CurrentUser.UserID, id);
+            if (!isSupervisor)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
             ViewBag.Title = course.CourseName;
 
             var success = course.Delete();
@@ -165,6 +182,7 @@ namespace ARMS.Controllers
         }
 
         // GET: Courses/Enroll/userId?courseId
+        // returns enroll confirmation view
         public ActionResult Enroll(int userId, int? courseId)
         {
             if (courseId == null)
@@ -172,15 +190,18 @@ namespace ARMS.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            int courseID = (int)courseId;
-            Course course = CourseHelper.GetById(courseID);
+            int id = (int)courseId;
+            Course course = CourseHelper.GetById(id);
 
             if (course == null)
             {
                 return HttpNotFound();
             }
-            
-            var participant = new Participant(userId, courseID, Participant.STATUS_PENDING);
+
+            if(CurrentWebContext.CurrentUser.Type == "teacher")
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+
+            var participant = new Participant(userId, id, Participant.STATUS_PENDING);
             var success = participant.Insert();
 
             if (success)
@@ -191,6 +212,8 @@ namespace ARMS.Controllers
             return View();
         }
 
+        // GET: Courses/SeeDetailedOverview/courseId?studentId
+        // returns detailed overviev view for the specified student and targeted course
         public ActionResult SeeDetailedOverview(int courseId, int studentId)
         {
             Course course = CourseHelper.GetById(courseId);
@@ -199,6 +222,12 @@ namespace ARMS.Controllers
             if (course == null || student == null)
             {
                 return HttpNotFound();
+            }
+
+            var isSupervisor = SupervisorHelper.IsUserSupervisor(CurrentWebContext.CurrentUser.UserID, courseId);
+            if (!isSupervisor)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
             }
 
             ViewBag.AttendancePerformance = ParticipantHelper.GetParticipantAttendance(student.UserID, course.CourseID);

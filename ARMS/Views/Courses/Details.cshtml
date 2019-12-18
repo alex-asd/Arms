@@ -1,10 +1,12 @@
 ﻿@model ARMS.ViewModel.DetailedCourseVM
 @using ARMS.Helpers
 @using ARMS.Data.Helpers
+@using ARMS.Data.Models
 
 @{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var attendancePercentage = ParticipantHelper.GetParticipantAttendance(CurrentWebContext.CurrentUser.UserID, Model.CourseID);
 }
 
 <h2>@Model.CourseName</h2>
@@ -37,22 +39,50 @@
         <dd>
             @Html.DisplayFor(model => model.CourseDescription)
         </dd>
-        @if (CurrentWebContext.CurrentUser.Type == "student" && ViewBag.IsParticipant)
-        {
-            <dt>Your attendance:</dt>
-            <dd style="text-decoration: underline;">
-                Performance: @ParticipantHelper.GetParticipantAttendance(CurrentWebContext.CurrentUser.UserID, Model.CourseID)%
-            </dd>
-        }
-        else if (CurrentWebContext.CurrentUser.Type == "student" && (!ViewBag.IsParticipant))
-        {
-            <dt>Join course:</dt>
-            <dd>
-                @Html.ActionLink("Enroll for this course", "Enroll", "Courses", new { userId = CurrentWebContext.CurrentUser.UserID, courseId = Model.CourseID }, null)
-            </dd>
-        }
-
     </dl>
+
+    @if (CurrentWebContext.CurrentUser.Type == "student" && ViewBag.StatusOfStudent == Participant.STATUS_ACTIVE)
+    {
+        <p>
+            Your attendance:
+            <span style="text-decoration: underline;">
+                Performance: @attendancePercentage%
+            </span>
+        </p>
+        <br />
+        <h4>Scheduled Lectures</h4>
+        <table class="custom-table">
+            <tr>
+                <th>From</th>
+                <th>To</th>
+            </tr>
+
+            @foreach (var item in Model.Lectures)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.From)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.To)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+    else if (CurrentWebContext.CurrentUser.Type == "student" && ViewBag.StatusOfStudent == "not")
+    {
+        <p>Join course:</p>
+        <p>
+            @Html.ActionLink("Enroll for this course", "Enroll", "Courses", new { userId = CurrentWebContext.CurrentUser.UserID, courseId = Model.CourseID }, null)
+        </p>
+    }
+    else if (CurrentWebContext.CurrentUser.Type == "student" && ViewBag.StatusOfStudent == Participant.STATUS_PENDING)
+    {
+        <p>
+            You have to wait to be approved before you can see scheduled lectures or see your attendance.
+        </p>
+    }
 
     @if (CurrentWebContext.CurrentUser.Type == "teacher")
     {
@@ -147,7 +177,7 @@
 <p>
     @if (CurrentWebContext.CurrentUser.Type == "teacher")
     {
-        @Html.ActionLink("Edit", "Edit", new { courseId = Model.CourseID }) 
+        @Html.ActionLink("Edit", "Edit", new { courseId = Model.CourseID })
         <span>|</span>
     }
     @Html.ActionLink("Back to List", "Index", new { userId = CurrentWebContext.CurrentUser.UserID })

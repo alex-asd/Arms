@@ -18,7 +18,7 @@
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @if(ViewBag.DateError != null)
     {
-        <h2>@ViewBag.DateError</h2>
+        <h2 class="text-danger">@ViewBag.DateError</h2>
     }
     <div class="form-group">
         @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "control-label col-md-2" })

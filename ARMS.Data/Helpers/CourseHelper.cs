@@ -154,21 +154,26 @@ namespace ARMS.Data.Helpers
         }
 
         // return true/false depending if the current user is a participant of the course
-        public static bool IsStudentPartOfCourse(int userId, int courseId)
+        public static string GetStudentStatusForCourse(int userId, int courseId)
         {
-            var boolean = false;
+            var type = "";
             try
             {
                 using (var dc = new ArmsContext())
                 {
-                    boolean = dc.Participants.Any(p => p.UserID == userId && p.CourseID == courseId);
+                    if (dc.Participants.Any(p => p.UserID == userId && p.CourseID == courseId && p.ParticipantStatus == Participant.STATUS_ACTIVE))
+                        type = Participant.STATUS_ACTIVE;
+                    else if (dc.Participants.Any(p => p.UserID == userId && p.CourseID == courseId && p.ParticipantStatus == Participant.STATUS_PENDING))
+                        type = Participant.STATUS_PENDING;
+                    else
+                        type = "not";
                 }
             }
             catch (Exception ex)
             {
                 var catchMsg = ex.Message;
             }
-            return boolean;
+            return type;
         }
     }
 }

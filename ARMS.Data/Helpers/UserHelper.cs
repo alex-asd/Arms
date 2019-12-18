@@ -49,7 +49,7 @@ namespace ARMS.Data.Helpers
             }
             catch (Exception ex)
             {
-                ex.ToString();
+                var catchMsg = ex.Message;
             }
             return model;
         }

@@ -37,6 +37,17 @@ namespace ARMS.ViewModel
             this.Creator = course.Creator;
         }
 
+        public static DetailedCourseVM CreateDetailedCourseVMW(Course course)
+        {
+            var vm = new DetailedCourseVM(course)
+            {
+                Supervisors = SupervisorHelper.GetSupervisorsForCourse(course.CourseID),
+                Lectures = LectureHelper.GetLecturesForCourse(course.CourseID),
+                Participants = UserHelper.GetParticipantsForCourse(course.CourseID)
+            };
+            return vm;
+        }
+
         public static DetailedCourseVM CreateDetailedCourseVMW(Course course, List<User> list)
         {
             var vm = new DetailedCourseVM(course)

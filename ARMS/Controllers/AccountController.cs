@@ -155,6 +155,11 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(model.TypeOfUser != ARMS.Data.Models.User.USER_STUDENT && model.TypeOfUser != ARMS.Data.Models.User.USER_TEACHER)
+                {
+                    ViewBag.Error = "You have to select type of user!";
+                    return View();
+                }
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, TypeOfUser = model.TypeOfUser };
 
                 var dataUser = new User(model.FirstName, model.LastName, model.Email, model.TypeOfUser);

@@ -21,8 +21,6 @@ namespace ARMS.Helpers
                 {
                     var email = HttpContext.Current.User.Identity.Name;
 
-                    UserHelper.IsRegistered(email);
-
                     user = UserHelper.GetByEmail(email);
                     
                     _CurrentUser = user;

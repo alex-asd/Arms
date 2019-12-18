@@ -55,37 +55,13 @@ arms.util = {
     }
 }
 
-$('.call-async').click(function (e) {
-    e.preventDefault();
-    console.log('async call clicked');
-
-    var that = $(this);
-
-    var href = that.prop('href');
-    console.log(href);
-
-    var id = that.data('id');
-    console.log(id);
-
-    var url = '{0}?Id={1}'.format(href, encodeURIComponent(id));
-
-    // Call the given url
-    cockpit.page.home.operateRequest = arms.util.ajaxGet(url, cockpit.page.home.operateRequest, null,
-        function () {
-            console.log('ajax called');
-        });
-});
-
 $('.async-delete').click(function (e) {
     e.preventDefault();
     console.log('async call clicked');
 
     var that = $(this);
-
     var href = that.prop('href');
-
     var type = that.data('type');
-
     var bool = arms.util.confirmDelete(type);
     if (!bool)
         return;
@@ -126,15 +102,10 @@ $('.async-add').click(function (e) {
     e.preventDefault();
 
     var that = $(this);
-
     var href = that.prop('href');
-
     var courseId = that.data('course-id');
-
     var type = that.data('type');
-
     var url;
-
     var modal = that.parent().parent();
 
     switch (type) {
