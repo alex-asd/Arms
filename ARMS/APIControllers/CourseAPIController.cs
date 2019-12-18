@@ -27,9 +27,10 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("foruser")]
-        public IHttpActionResult GetForUser(int id)
+        public IHttpActionResult GetForUser()
         {
-            var curr_user = UserHelper.GetById(id);
+            var user_id = APIUtils.GetUserFromClaim(ClaimsPrincipal.Current);
+            var curr_user = UserHelper.GetById(user_id);
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
@@ -96,6 +97,22 @@ namespace ARMS.APIControllers
             if (success)
             {
                 return Ok(id);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Authorize]
+        [Route("delete")]
+        public IHttpActionResult DeleteCourse([FromBody] Course courseToDelete)
+        {
+            bool success = false;
+            APIUtils.CanChangeCourse(courseToDelete.CourseID, ClaimsPrincipal.Current);
+            success = courseToDelete.Delete();
+            if (success)
+            {
+                return Ok(new ApiCallbackMessage("", success));
             }
 
             return BadRequest();

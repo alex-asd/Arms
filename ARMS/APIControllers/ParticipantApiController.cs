@@ -12,7 +12,7 @@ using ARMS.ViewModel;
 
 namespace ARMS.APIControllers
 {
-    [RoutePrefix("participants")]
+    [RoutePrefix("api/participants")]
     public class ParticipantApiController : ApiController
     {
         [HttpGet]
@@ -31,8 +31,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("is-participant")]
-        public IHttpActionResult GetById(int course_id, int user_id)
+        public IHttpActionResult IsParticipant(int course_id)
         {
+            var user_id = APIUtils.GetUserFromClaim(ClaimsPrincipal.Current);
             using (var dc = new ArmsContext())
             {
                 dc.Configuration.LazyLoadingEnabled = false;
@@ -52,8 +53,9 @@ namespace ARMS.APIControllers
         [HttpGet]
         [Authorize]
         [Route("get-participant-attendance")]
-        public IHttpActionResult GetParticipantAttendance(int course_id, int user_id)
+        public IHttpActionResult GetParticipantAttendance(int course_id)
         {
+            var user_id = APIUtils.GetUserFromClaim(ClaimsPrincipal.Current);
             var attendance = ParticipantHelper.GetParticipantAttendance(user_id, course_id);
             return Ok(new ApiCallbackMessage(attendance.ToString(), true));
         }
@@ -61,8 +63,9 @@ namespace ARMS.APIControllers
         [HttpPost]
         [Authorize]
         [Route("apply")]
-        public IHttpActionResult ApplyParticipant(int course_id, int user_id)
+        public IHttpActionResult ApplyParticipant(int course_id)
         {
+            var user_id = APIUtils.GetUserFromClaim(ClaimsPrincipal.Current);
             using (var dc = new ArmsContext())
             {
                 //TODO: Add check if exists
