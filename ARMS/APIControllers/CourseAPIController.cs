@@ -80,8 +80,8 @@ namespace ARMS.APIControllers
                 return Unauthorized();
             }
 
-            courseToUpdate.Update();
-            return Ok(new ApiCallbackMessage("Success", true));
+            var success = courseToUpdate.Update();
+            return Ok(new ApiCallbackMessage(success ? "Success" : "Failed", success));
         }
 
         [HttpPost]
