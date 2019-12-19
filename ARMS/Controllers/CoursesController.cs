@@ -91,6 +91,12 @@ namespace ARMS.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(CourseHelper.Exists(course.CourseName))
+                {
+                    ViewBag.Error = "Such a course name exists, please try with another!";
+                    return View();
+                }
+
                 course.CreatorID = CurrentWebContext.CurrentUser.UserID;
                 course.Insert();
 
