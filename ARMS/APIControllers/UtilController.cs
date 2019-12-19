@@ -72,8 +72,14 @@ namespace ARMS.APIControllers
             var user = UserHelper.GetByEmail(email);
             if (user == null)
                 return;
-            var attendee = new Attendee(user.UserID, lectureId, "");
-            attendee.Insert();
+            var lecture = LectureHelper.GetById(lectureId);
+            var studentStatus = CourseHelper.GetStudentStatusForCourse(user.UserID, lecture.CourseID);
+
+            if (studentStatus == Participant.STATUS_ACTIVE)
+            {
+                var attendee = new Attendee(user.UserID, lectureId, "");
+                attendee.Insert();
+            }
         }
 
         [HttpGet]
