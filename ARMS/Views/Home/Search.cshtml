@@ -11,9 +11,10 @@
 {
     @Html.AntiForgeryToken()
 
-    <input type="text" id="searchString" name="searchString">
+    <input type="text" class="form-control inlined" id="searchString" name="searchString">
 
-    <input type="submit" id="submitId" value="Submit" />
+    <input type="submit" class="btn btn-default" id="submitId" value="Submit" />
+    <br />
 }
 
 @if (ViewBag.SearchKey != null)
@@ -61,5 +62,6 @@
         <h6>Please try again</h6>
     }
 }
+<br />
 
 

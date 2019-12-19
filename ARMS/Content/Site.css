@@ -181,4 +181,8 @@ a {
     width: 678px;
     height: auto;
     min-height: 380px;
-} 
+}
+
+.inlined {
+    display: inline !important;
+}
