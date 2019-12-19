@@ -56,7 +56,7 @@
         </div>
     </div>
 
-    @if (Model.To < DateTime.Now)
+    @if (Model.From < DateTime.Now)
     {
         <h4>Edit list of students that have attended the lecture:</h4>
         <button type="button" class="btn btn-default" aria-label="Left Align" data-toggle="modal" data-target="#addAttendeeModal">

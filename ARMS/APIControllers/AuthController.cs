@@ -133,9 +133,7 @@ namespace ARMS.APIControllers
             {
                 return ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest));
             }
-
-
-            var loginResponse = new LoginResponseVM();
+            
             var loginrequest = new LoginVM
             {
                 Email = loginVM.Email.ToLower(),

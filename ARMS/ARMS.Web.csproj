@@ -247,7 +247,6 @@
     <Compile Include="ViewModel\ApiCallbackMessage.cs" />
     <Compile Include="ViewModel\DetailedCourseVM.cs" />
     <Compile Include="ViewModel\DetailedOverviewForStudentVM.cs" />
-    <Compile Include="ViewModel\LoginResponseVM.cs" />
     <Compile Include="ViewModel\LoginVM.cs" />
     <Compile Include="ViewModel\UserParticipantVM.cs" />
     <Compile Include="ViewModel\RegistrationVM.cs" />
