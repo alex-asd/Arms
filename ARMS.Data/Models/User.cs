@@ -61,7 +61,7 @@ namespace ARMS.Data.Models
 
                     if (sqlEntry != null && (upsertType == BonusEnum.UpsertType.Upsert || upsertType == BonusEnum.UpsertType.Update))
                     {
-                        sqlEntry.FirstName = this.FirstName.ToLower();
+                        sqlEntry.FirstName = this.FirstName;
                         sqlEntry.LastName = this.LastName;
                         sqlEntry.Type = this.Type;
                         sqlEntry.Email = this.Email;
