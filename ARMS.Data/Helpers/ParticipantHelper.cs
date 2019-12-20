@@ -40,8 +40,11 @@ namespace ARMS.Data.Helpers
                 using (var dc = new ArmsContext())
                 {
                     // get number of lectures for the course that have happened
-                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId && x.To <= DateTime.Now).ToList();
+                    var lectures = dc.Lectures.Where(x => x.CourseID == courseId && x.From <= DateTime.Now).ToList();
                     decimal numOfLectures = lectures.Count();
+
+                    if (numOfLectures == 0)
+                        return 0m;
 
                     // get number of attended lectures for the student
                     decimal noa = 0m;
@@ -52,9 +55,6 @@ namespace ARMS.Data.Helpers
                         if(dc.Attendees.Any(x => x.LectureID == lecture.LectureID && x.UserID == userId))
                             noa++;
                     }
-
-                    if (numOfLectures == 0)
-                        return 0;
                     
                     result = (noa / numOfLectures) * 100m;
                 }

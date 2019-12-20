@@ -57,11 +57,19 @@ namespace ARMS.Data.Helpers
         // returns whether there is a Course with such courseName in the DB
         public static bool Exists(string courseName)
         {
-            var lowerCourseName = courseName.ToLower();
-            using (var dc = new ArmsContext())
+            var exists = false;
+            try
             {
-                return !dc.Courses.Any(u => u.CourseName == lowerCourseName);
+                using (var dc = new ArmsContext())
+                {
+                    exists = dc.Courses.Any(u => u.CourseName == courseName);
+                }
             }
+            catch(Exception ex)
+            {
+                var catchMsg = ex.Message;
+            }
+            return exists;
         }
 
         // deletes a Course with the targeted name
