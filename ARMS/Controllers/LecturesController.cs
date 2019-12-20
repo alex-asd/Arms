@@ -16,7 +16,7 @@ namespace ARMS.Controllers
     [RoutePrefix("Lectures")]
     public class LecturesController : Controller
     {
-        // GET: Lectures
+        // GET: Lectures/courseId
         public ActionResult Index(int courseId)
         {
             var lectures = LectureHelper.GetLecturesForCourse(courseId);
@@ -26,7 +26,7 @@ namespace ARMS.Controllers
             return View(lectures);
         }
 
-        // GET: Lectures/Details/5
+        // GET: Lectures/Details/courseId&lectureId
         public ActionResult Details(int courseId, int? lectureId)
         {
             if (lectureId == null)
@@ -49,7 +49,7 @@ namespace ARMS.Controllers
             return View(lecture);
         }
 
-        // GET: Lectures/Create
+        // GET: Lectures/Create/courseId
         public ActionResult Create(int courseId)
         {
             ViewBag.CourseID = courseId;
@@ -75,7 +75,7 @@ namespace ARMS.Controllers
             return View(lecture);
         }
 
-        // GET: Lectures/Edit/5
+        // GET: Lectures/Edit/courseId&lectureId
         public ActionResult Edit(int courseId, int? lectureId)
         {
             if (lectureId == null)
@@ -95,7 +95,7 @@ namespace ARMS.Controllers
             return View(lecture);
         }
 
-        // POST: Lectures/Edit/5
+        // POST: Lectures/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "LectureID,From,To,CheckInEnabled,CourseID")] Lecture lecture)
@@ -117,7 +117,7 @@ namespace ARMS.Controllers
             return View(lecture);
         }
 
-        // GET: Lectures/Delete/5
+        // GET: Lectures/Delete/courseId&lectureId
         [Route("Lectures/Delete")]
         public ActionResult Delete(int courseId, int? lectureId)
         {

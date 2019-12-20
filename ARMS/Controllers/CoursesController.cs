@@ -187,7 +187,7 @@ namespace ARMS.Controllers
             return View();
         }
 
-        // GET: Courses/Enroll/userId?courseId
+        // GET: Courses/Enroll/userId&courseId
         // returns enroll confirmation view
         public ActionResult Enroll(int userId, int? courseId)
         {
@@ -218,7 +218,7 @@ namespace ARMS.Controllers
             return View();
         }
 
-        // GET: Courses/SeeDetailedOverview/courseId?studentId
+        // GET: Courses/SeeDetailedOverview/courseId&studentId
         // returns detailed overviev view for the specified student and targeted course
         public ActionResult SeeDetailedOverview(int courseId, int studentId)
         {
